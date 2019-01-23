@@ -315,6 +315,12 @@
     &[data-color="orange"]{
         @include set-background-color-button($brand-warning);
     }
+    &[data-color="syn_orange"]{
+        @include set-background-color-button(#000);
+    }
+    &[data-color="syn_gray"]{
+        @include set-background-color-button(#6f7276);
+    }
     &[data-color="danger"]{
         @include set-background-color-button($brand-danger);
     }
