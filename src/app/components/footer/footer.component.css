@@ -1,0 +1,24 @@
+/* .tableLbl {
+    height: 40px;
+    background: #1e3e88;
+    width: 100%;
+} */
+
+.tableLbl span {
+  color: transparent;
+  font-weight: bolder;
+  line-height: 30px;
+}
+
+.tableLbl {
+  height: 40px;
+  bottom: 0px;
+  top: 15px;
+  position: relative; /* child absolute */
+  margin: 0 -9999rem;
+  /* add back section padding value */
+  padding: .25rem 9999rem;
+  background: #666;
+  background: #1e3e88;
+  font-size: 1.125rem;
+}

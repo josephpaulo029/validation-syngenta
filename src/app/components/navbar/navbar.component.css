@@ -1,0 +1,23 @@
+.timeStyle {
+  color: #4d4f5c;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.timeStyle span {
+  color: #4d4f5c;
+      font-size: 1.5rem;
+      font-weight: bolder;
+}
+
+.tableLbl {
+  height: 40px;
+  background: #1e3e88;
+  margin-top: 50px;
+  margin-bottom: -70px;
+}
+
+.tableLbl span {
+  color: #fff;
+  font-weight: bolder;
+  line-height: 30px;
+}
