@@ -1,0 +1,15 @@
+div.imgStyle img {
+    height: auto;
+    width: 150px;
+    padding: 1rem 0rem 0.5rem 0rem;
+}
+  
+.labelName {
+    text-align: center;
+}
+
+.labelName span {
+    color: #6f7276;
+    font-weight: 600;
+    font-size: 0.8rem;
+}

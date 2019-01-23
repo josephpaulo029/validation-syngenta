@@ -1,0 +1,70 @@
+<div class="growersTbl">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr *ngIf="status == 'pendingActive'">
+          <th>TRANSACTION ID</th>
+          <th>MEMBER ID</th>
+          <th>GROWERS NAME</th>
+          <th>STORE NAME</th>
+          <th>INVOICE #</th>
+          <th>SUBMITTED DATE</th>
+          <th>ACTION</th>
+        </tr>
+        <tr *ngIf="status == 'approvedActive'">
+          <th>TRANSACTION ID</th>
+          <th>MEMBER ID</th>
+          <th>GROWERS NAME</th>
+          <th>STORE NAME</th>
+          <th>INVOICE #</th>
+          <th>POINTS EARNED</th>
+          <th>VALIDATED DATE</th>
+          <th>ACTION</th>
+        </tr>
+        <tr *ngIf="status == 'deniedActive'">
+          <th>TRANSACTION ID</th>
+          <th>MEMBER ID</th>
+          <th>GROWERS NAME</th>
+          <th>STORE NAME</th>
+          <th>INVOICE #</th>
+          <th>POINTS EARNED</th>
+          <th>VALIDATED DATE</th>
+          <th>ACTION</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="status == 'pendingActive'">
+        <tr *ngFor="let pending of growersData" (click)="selectData(pending)">
+          <td>{{ pending.id || '-' }}</td>
+          <td>{{ pending.grower || '-' }}</td>
+          <td>{{ pending.growersName || '-' }}</td>
+          <td>{{ pending.store || '-' }}</td>
+          <td>{{ pending.invoice || '-' }}</td>
+          <td>{{ pending.created | date: "MM/dd/yyyy" || '-' }}</td>
+          <td class="text-center">VIEW</td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="status == 'approvedActive'">
+        <tr *ngFor="let apprv of growersData" (click)="selectData(apprv)">
+          <td>{{ apprv.id || '-' }}</td>
+          <td>{{ apprv.grower || '-' }}</td>
+          <td>{{ apprv.growersName || '-' }}</td>
+          <td>{{ apprv.store || '-' }}</td>
+          <td>{{ apprv.invoice || '-' }}</td>
+          <td>{{ apprv.points || '-' }}</td>
+          <td>{{ apprv.modified | date: "MM/dd/yyyy" || '-' }}</td>
+          <td class="text-center">VIEW</td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="status == 'deniedActive'">
+        <tr *ngFor="let denied of growersData" (click)="selectData(denied)">
+          <td>{{ denied.id || '-' }}</td>
+          <td>{{ denied.grower || '-' }}</td>
+          <td>{{ denied.growersName || '-' }}</td>
+          <td>{{ denied.store || '-' }}</td>
+          <td>{{ denied.invoice || '-' }}</td>
+          <td>{{ denied.points || '-' }}</td>
+          <td>{{ denied.modified | date: "MM/dd/yyyy" || '-' }}</td>
+          <td class="text-center">VIEW</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

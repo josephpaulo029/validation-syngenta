@@ -169,6 +169,30 @@
     &.card-rotate.bg-primary .back{
       background: linear-gradient(60deg, $purple-400, $purple-600);
     }
+    .card-header-dark .card-icon,
+    .card-header-dark .card-text,
+    .card-header-dark:not(.card-header-icon):not(.card-header-text),
+    &.bg-primary,
+    &.card-rotate.bg-primary .front,
+    &.card-rotate.bg-primary .back{
+      background: linear-gradient(60deg, #212121, #424242);
+    }
+    .card-header-gray .card-icon,
+    .card-header-gray .card-text,
+    .card-header-gray:not(.card-header-icon):not(.card-header-text),
+    &.bg-primary,
+    &.card-rotate.bg-primary .front,
+    &.card-rotate.bg-primary .back{
+      background: linear-gradient(60deg, #515253, #bdbebe);
+    }
+    .card-header-blue .card-icon,
+    .card-header-blue .card-text,
+    .card-header-blue:not(.card-header-icon):not(.card-header-text),
+    &.bg-primary,
+    &.card-rotate.bg-primary .front,
+    &.card-rotate.bg-primary .back{
+      background: linear-gradient(60deg, #1e3e88, #648ceb);
+    }
     .card-header-info .card-icon,
     .card-header-info .card-text,
     .card-header-info:not(.card-header-icon):not(.card-header-text),
@@ -215,6 +239,30 @@
     .card-header-primary:not(.card-header-icon):not(.card-header-text),
     .card-header-primary .card-text{
         @include shadow-big-color($brand-primary);
+
+        //@include shadow-8dp-color($brand-primary);
+        //@include shadow-16dp-color($brand-primary);
+    }
+    .card-header-dark .card-icon,
+    .card-header-dark:not(.card-header-icon):not(.card-header-text),
+    .card-header-dark .card-text{
+        @include shadow-big-color(#212121);
+
+        //@include shadow-8dp-color($brand-primary);
+        //@include shadow-16dp-color($brand-primary);
+    }
+    .card-header-gray .card-icon,
+    .card-header-gray:not(.card-header-icon):not(.card-header-text),
+    .card-header-gray .card-text{
+        @include shadow-big-color(#515253);
+
+        //@include shadow-8dp-color($brand-primary);
+        //@include shadow-16dp-color($brand-primary);
+    }
+    .card-header-blue .card-icon,
+    .card-header-blue:not(.card-header-icon):not(.card-header-text),
+    .card-header-blue .card-text{
+        @include shadow-big-color(#1e3e88);
 
         //@include shadow-8dp-color($brand-primary);
         //@include shadow-16dp-color($brand-primary);

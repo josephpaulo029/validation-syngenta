@@ -10,7 +10,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
-
+import { DataTablesModule } from 'angular-datatables';
+import { ValidationService } from './services/validation.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,9 +26,10 @@ import { ComponentsModule } from './components/components.module';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    DataTablesModule,
   ],
   providers: [
-
+    ValidationService
   ],
   bootstrap: [
     AppComponent

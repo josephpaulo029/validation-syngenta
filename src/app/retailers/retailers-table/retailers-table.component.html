@@ -1,0 +1,58 @@
+<div class="retailersTbl">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr *ngIf="status == 'pendingActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>RETAILER NAME</th>
+        <th>INVOICE #</th>
+        <th>SALES AMOUNT</th>
+        <th>SUBMITTED DATE</th>
+        <th>ACTION</th>
+      </tr>
+      <tr *ngIf="status == 'approvedActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>GROWERS NAME</th>
+        <th>INVOICE #</th>
+        <th>SALES AMOUNT</th>
+        <th>POINTS EARNED</th>
+        <th>VALIDATED DATE</th>
+        <th>ACTION</th>
+      </tr>
+      <tr *ngIf="status == 'deniedActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>GROWERS NAME</th>
+        <th>INVOICE #</th>
+        <th>SALES AMOUNT</th>
+        <th>POINTS EARNED</th>
+        <th>VALIDATED DATE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="status == 'pendingActive'">
+      <tr *ngFor="let retail of retailersData" (click)="selectData(retail)">
+        <td>{{ retail.id || '-' }}</td>
+        <td>{{ retail.retailer || '-' }}</td>
+        <td>{{ retail.retailersName || '-' }}</td>
+        <td>{{ retail.invoice || '-' }}</td>
+        <td>{{ retail.salesAmt || '-' }}</td>
+        <td>{{ retail.dateSubmitted || '-' }}</td>
+        <td class="text-center">VIEW</td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="status == 'approvedActive' || status == 'deniedActive'">
+      <tr *ngFor="let retail of retailersData" (click)="selectData(retail)">
+        <td>{{ retail.id || '-' }}</td>
+        <td>{{ retail.grower || '-' }}</td>
+        <td>{{ retail.growersName || '-' }}</td>
+        <td>{{ retail.invoice || '-' }}</td>
+        <td>{{ retail.salesAmt || '-' }}</td>
+        <td>{{ retail.points || '-' }}</td>
+        <td>{{ retail.modified || '-' }}</td>
+        <td class="text-center">VIEW</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

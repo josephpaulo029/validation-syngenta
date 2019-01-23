@@ -10,9 +10,8 @@ import {
 } from '@angular/material';
 import { LayoutRoutingModule } from './layout-routing.module';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { GrowersComponent } from '../growers/growers.component';
-import { RetailersComponent } from '../retailers/retailers.component';
-
+import { GrowersModule } from '../growers/growers.module';
+import { RetailersModule } from '../retailers/retailers.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,11 +21,12 @@ import { RetailersComponent } from '../retailers/retailers.component';
     MatRippleModule,
     MatInputModule,
     MatTooltipModule,
+    GrowersModule,
+    RetailersModule,
+
   ],
   declarations: [
     DashboardComponent,
-    GrowersComponent,
-    RetailersComponent,
   ]
 })
 export class LayoutModule { }

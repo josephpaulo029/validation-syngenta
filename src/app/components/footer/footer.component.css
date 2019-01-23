@@ -18,7 +18,7 @@
   margin: 0 -9999rem;
   /* add back section padding value */
   padding: .25rem 9999rem;
-  background: #666;
-  background: #1e3e88;
+  /* background: #1e3e88; */
+  background: linear-gradient(60deg, #666668, #e7e7eb);
   font-size: 1.125rem;
 }

@@ -1,0 +1,181 @@
+.onDashboard {
+    margin-top: -55px !important;
+    padding: 0px 0px !important;
+    min-height: calc(0vh - 123px) !important;
+}
+
+.onDashboard .container-fluid {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+
+.onDashboard .tableLbl {
+    /* background: #34495e !important; */
+    background: #6f7276 !important
+}
+
+.card .card-header.card-header-blue {
+    margin-left: 15px;
+    margin-right: 15px;
+    text-align: left;
+}
+
+.card .card-body {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+
+.growerTable {
+    margin-top: 30px !important;
+    margin-bottom: 0px !important;
+}
+
+.viewDataTable {
+    margin-top: 0px !important;
+}
+
+.tableLbl {
+    height: 40px;
+    /* background: #34495e; */
+    background: linear-gradient(60deg, #66bb6a, #43a047);
+    text-align: left;
+    /* margin-top: 50px; */
+    margin-bottom: 20px;
+    border: solid;
+    border-color: transparent;
+    border-radius: 3px;
+}
+
+.tableLbl span {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 35px;
+}
+
+.viewDataStyle {
+    height: 30px;
+    background: #3a3e46;
+    margin-top: 10px;
+    /*  margin-bottom: 20px; */
+    
+}
+
+.viewDataStyle thead {
+    background: #3a3e46;
+    
+}
+
+.viewDataStyle tr {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.viewDataStyle span {
+    color: #fff;
+    font-weight: bolder;
+    line-height: 30px;
+    font-size: 0.9rem;
+}
+
+.viewDataCol3 .col-2 {
+    background: #459f67;
+    color: #fff;
+    margin-top: 1px;
+    /* margin-left: 15px; */
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+}
+
+.viewDataCol3 .col-10 {
+    background: #dbe3e8;
+    color: #000;
+    margin-top: 1px;
+    /* margin-right: -15px; */
+    /* margin-left: -30px; */
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+  }
+
+.viewDataProductsheader .col-4 {
+    background: #3a3e46;
+    color: #fff;
+    margin: 1px;
+    /* margin-right: -10px; */
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+    text-align: center;
+    
+}
+
+.viewDataProductsheader .col {
+    background: #3a3e46;
+    color: #fff;
+    margin: 1px;
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+    text-align: center;
+    
+}
+
+.viewDataProductsbody .col-4 {
+    background: #fff;
+    color: #000;
+    margin: 1px;
+    /* margin-right: -10px; */
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+    text-align: center;
+    
+}
+
+.viewDataProductsbody .col {
+    background: #fff;
+    color: #000;
+    margin: 1px;
+    line-height: 30px;
+    font-weight: bolder;
+    font-size: 0.7rem;
+    text-align: center;
+    
+}
+
+.viewDataProductsbody input {
+    text-align: center;
+    border: none;
+}
+
+.btnStyles button {
+    padding: 10px 20px;
+    margin: 0px 15px;
+}
+
+.btnStyles .btn-success {
+    background: #459f67;
+}
+
+.btnStyles .btn-danger {
+    background: #fc1818;
+}
+  
+.goBack {
+  color: #0ca126;
+  font-size: 1rem;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+tbody td {
+  text-align: center;
+  cursor: pointer;
+}
+
+.spacer {
+    height: 20px;
+}

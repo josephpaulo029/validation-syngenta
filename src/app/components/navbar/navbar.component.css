@@ -12,8 +12,11 @@
 .tableLbl {
   height: 40px;
   background: #1e3e88;
+  /* background: linear-gradient(60deg, #1e3e88, #648ceb); */
+  background: linear-gradient(60deg, #bebec0, #e7e7eb);
   margin-top: 50px;
-  margin-bottom: -70px;
+  margin-bottom: -40px;
+  border: none;
 }
 
 .tableLbl span {

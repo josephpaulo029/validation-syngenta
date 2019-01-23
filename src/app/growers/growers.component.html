@@ -1,9 +1,161 @@
-<div class="main-content">
-  <div class="container-fluid">
-    <div class="row">
-      <p>
-        growers works!
-      </p>
+<div class="spacer"></div>
+<div class="main-content" [ngClass]="{ onDashboard: dashboard}" style="padding: 10px 15px;">
+  <div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
+
+    <div class="card card-nav-tabs card-plain" [ngClass]="{ growerTable: !viewDataActive}" *ngIf="!viewDataActive">
+      <div class="card-header card-header-gray" *ngIf="!dashboard && !viewDataActive">
+        <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+        <div class="nav-tabs-navigation">
+          <div class="nav-tabs-wrapper">
+            <ul class="nav nav-tabs" data-tabs="tabs">
+              <li class="nav-item" (click)="clickPending()">
+                <a class="nav-link active" href="#pending" data-toggle="tab">Pending</a>
+              </li>
+              <li class="nav-item" (click)="clickApproved()">
+                <a class="nav-link" href="#approved" data-toggle="tab">Approved</a>
+              </li>
+              <li class="nav-item" (click)="clickDenied()">
+                <a class="nav-link" href="#denied" data-toggle="tab">Denied</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" [hidden]="viewDataActive">
+        <div class="tab-content text-center">
+          <!-- <div class="tableLbl" *ngIf="pendingActive && !viewDataActive"><span>&nbsp;&nbsp;GROWERS SUBMISSION FOR
+              VALIDATION</span></div>
+          <div class="tableLbl" *ngIf="approvedActive && !viewDataActive || deniedActive && !viewDataActive">
+            <span>&nbsp;&nbsp;LIST OF TRANSACTIONS</span>
+          </div> -->
+
+          <div class="tab-pane active" id="pending">
+            <div class="card">
+              <div class="card-header card-header-blue">
+                <h4 class="card-title">GROWERS SUBMISSION FOR VALIDATION</h4>
+                <!-- <p class="category">Category subtitle</p> -->
+              </div>
+              <div class="card-body">
+                <app-growers-table [status]="'pendingActive'" [growersData]="pendingGrowersData" (viewData)="selectData($event)"></app-growers-table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="approved">
+            <div class="card">
+              <div class="card-header card-header-blue">
+                <h4 class="card-title">LIST OF TRANSACTIONS</h4>
+                <!-- <p class="category">Category subtitle</p> -->
+              </div>
+              <div class="card-body">
+                <app-growers-table [status]="'approvedActive'" [growersData]="approveGrowersData" (viewData)="selectData($event)"></app-growers-table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="denied">
+            <div class="card">
+              <div class="card-header card-header-blue">
+                <h4 class="card-title">LIST OF TRANSACTIONS</h4>
+                <!-- <p class="category">Category subtitle</p> -->
+              </div>
+              <div class="card-body">
+                <app-growers-table [status]="'deniedActive'" [growersData]="deniedGrowersData" (viewData)="selectData($event)"></app-growers-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+
+    <div class="card" [ngClass]="{ viewDataTable: viewDataActive}" *ngIf="viewDataActive" style="margin-top: 0px; background: transparent;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0);">
+      <!-- <div class="card-header card-header-gray">
+          <h4 class="card-title ">TRANSACTION DETAILS</h4>
+        </div> -->
+      <h5 class="goBack" *ngIf="viewDataActive" (click)="goBack()">GO BACK</h5>
+
+      <div class="card-body" style="padding-top: 0px;">
+        <div class="row viewDataStyle"><span>&nbsp;&nbsp;TRANSACTION DETAILS</span></div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">TRANSACTION ID</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.id || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">GROWERS NAME</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.growersName || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">MEMBER ID</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.id || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">RETAILER</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.receipt_from || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">FIELD FORCE</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.fieldForce || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">INVOICE NUMBER</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.receipt_number || '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">INVOICE DATE</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.created | date: "MM/dd/yyyy" || '-'
+            }}</div>
+        </div>
+        <div class="row viewDataCol3" *ngIf="viewData.status == 1 || viewData.status == 4">
+          <div class="col col-2">VALIDATED DATE</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.modified | date: "MM/dd/yyyy" ||
+            '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">TOTAL GROSS SALES</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ totalGross || '0' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">ATTACHED INVOICE</div>
+          <div class="col col-10" style="cursor: pointer;" (click)="viewAttachment('attachment')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
+            viewData.receipt_photo ? 'VIEW ATTACHMENT': '-' }}</div>
+        </div>
+        <div class="row viewDataCol3">
+          <div class="col col-2">TOTAL POINTS EARNED</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.points || 0 }}</div>
+        </div>
+        <div class="row viewDataCol3" *ngIf="viewData.status == 1 || viewData.status == 4">
+          <div class="col col-2">STATUS</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.status == 1 ? 'APPROVED':
+            viewData.status
+            == 4 ? 'DENIED' : '-' }}</div>
+        </div>
+        <div class="row viewDataCol3" *ngIf="viewData.status == 4">
+          <div class="col col-2">REASON</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.remarks }}</div>
+        </div>
+        <div class="row viewDataProductsheader">
+          <div class="col col-4">PRODUCT NAME</div>
+          <div class="col">QUANTITY</div>
+          <div class="col">AMOUNT</div>
+          <div class="col">EARNED POINTS</div>
+        </div>
+        <div class="row viewDataProductsbody" *ngFor="let prod of viewData.products">
+          <div class="col col-4">{{ prod.name || '-' }}</div>
+          <div class="col">{{ prod.quantity || '-' }}</div>
+          <div class="col">
+            <form #amt="ngForm"><input type="number" name="amount" (change)="addAmt(prod,amt)" ngModel></form>
+          </div>
+          <div class="col">{{ prod.points || '-' }}</div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="row btnStyles" *ngIf="viewData.status == 2">
+          <button type="button" class="btn btn-success" (click)="approveTrans('approved', true)">APPROVED</button>
+          <button type="button" class="btn btn-danger" (click)="denyTrans('deny')">DENIED</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
