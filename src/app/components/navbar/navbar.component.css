@@ -9,6 +9,18 @@
       font-weight: bolder;
 }
 
+.logoStyle {
+  position: relative;
+}
+.logoStyle img {
+  position: absolute;
+  top: calc(100% - 20px);
+  right: calc(100% + 280px);
+  height: auto;
+  width: 140px;
+}
+
+
 .tableLbl {
   height: 40px;
   background: #1e3e88;

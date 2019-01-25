@@ -36,7 +36,8 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-table [status]="'pendingActive'" [retailersData]="pendingRetailersData" (viewData)="selectData($event)"></app-retailers-table>
+                <app-retailers-table [dashboard]="dashboard" [status]="'pendingActive'" [retailersData]="pendingRetailersData"
+                  (viewData)="selectData($event)"></app-retailers-table>
               </div>
             </div>
           </div>
@@ -47,7 +48,8 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-table [status]="'approvedActive'" [retailersData]="approveRetailersData" (viewData)="selectData($event)"></app-retailers-table>
+                <app-retailers-table [dashboard]="dashboard" [status]="'approvedActive'" [retailersData]="approveRetailersData"
+                  (viewData)="selectData($event)"></app-retailers-table>
               </div>
             </div>
           </div>
@@ -58,7 +60,8 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-table [status]="'deniedActive'" [retailersData]="deniedRetailersData" (viewData)="selectData($event)"></app-retailers-table>
+                <app-retailers-table [dashboard]="dashboard" [status]="'deniedActive'" [retailersData]="deniedRetailersData"
+                  (viewData)="selectData($event)"></app-retailers-table>
               </div>
             </div>
           </div>
@@ -77,33 +80,33 @@
         <div class="row viewDataStyle"><span>&nbsp;&nbsp;TRANSACTION DETAILS</span></div>
         <div class="row viewDataCol3">
           <div class="col col-2">TRANSACTION ID</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.id || '-' }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.transid || '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">RETAILER</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.retailerName || '-' }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.name || '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">MEMBER ID</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.retailer || '-' }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.membershipid || '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">INVOICE NUMBER</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.id || '-' }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.invoice || '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">INVOICE DATE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.created | date: "MM/dd/yyyy" || '-'
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.submitteddate | date: "MM/dd/yyyy" || '-'
             }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">VALIDATED DATE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.modified | date: "MM/dd/yyyy" || '-'
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.modifieddate | date: "MM/dd/yyyy" || '-'
             }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">FIELD FORCE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.fieldForce || '-' }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.fieldforce || '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">DISTRIBUTOR</div>
@@ -115,14 +118,14 @@
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">ATTACHED INVOICE</div>
-          <div class="col col-10" style="cursor: pointer;" (click)="viewAttachment('attachment')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
+          <div class="col col-10" style="cursor: pointer;" data-toggle="modal" data-target="#viewAttachment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
             viewData.receipt_photo ? 'VIEW ATTACHMENT': '-' }}</div>
         </div>
         <div class="row viewDataCol3">
           <div class="col col-2">TOTAL POINTS EARNED</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.points || 0 }}</div>
+          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.totalPoints || 0 }}</div>
         </div>
-        <div class="row viewDataCol3" *ngIf="viewData.status == 3 || viewData.status == 4">
+        <div class="row viewDataCol3" *ngIf="viewData.status ? viewData.status == 3 : false || viewData.status ? viewData.status == 4 : false">
           <div class="col col-2">STATUS</div>
           <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.status == 3 ? 'APPROVED':
             viewData.status
@@ -139,7 +142,7 @@
           <div class="col">EARNED POINTS</div>
         </div>
         <div class="row viewDataProductsbody" *ngFor="let prod of viewData.products">
-          <div class="col col-4">{{ prod.productName || '-' }}</div>
+          <div class="col col-4">{{ prod.name || '-' }}</div>
           <div class="col">{{ prod.quantity || '-' }}</div>
           <div class="col">
             <form #amt="ngForm"><input type="number" name="amount" (change)="addAmt(prod,amt)" ngModel></form>
@@ -150,11 +153,79 @@
         <div class="spacer"></div>
 
         <div class="row btnStyles" *ngIf="viewData.status == 2">
-          <button type="button" class="btn btn-success" (click)="approveTrans('approved', true)">APPROVED</button>
-          <button type="button" class="btn btn-danger" (click)="denyTrans('deny')">DENIED</button>
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approveModal" (click)="approveTrans(true)">APPROVED</button>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyModal">DENIED</button>
         </div>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="approveModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="approveModalLabel">PURCHASES {{modalHeader}}</h4>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+      </div>
+      <div class="modal-body">
+        <h5 *ngIf="modalHeader == 'APPROVED'">Retailer Documents is subject for final approval by Syngenta Marketing</h5>
+        <h5 *ngIf="modalHeader == 'DENIED'">Retailer will be notified via SMS</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="denyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="denyModalLabel">TYPE REASON</h4>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+      </div>
+      <div class="modal-body">
+        <form style="margin-bottom: 0rem;" #reason="ngForm"><textarea rows="4" cols="40" name="reason" ngModel></textarea></form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#approveModal"
+          (click)="denyTrans(reason, false)">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewAttachmentLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" *ngIf="false">
+        <h4 class="modal-title" id="viewAttachmentLabel"></h4>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <img src="{{attachedImg ? attachedImg : ''}}" style="width: 100%;height: 100%;" data-dismiss="modal" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" *ngIf="false">
+        <!-- <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#approveModal" (click)="denyTrans(reason, false)">SUBMIT</button> -->
+      </div>
+    </div>
   </div>
 </div>

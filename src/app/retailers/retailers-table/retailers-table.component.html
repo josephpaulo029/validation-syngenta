@@ -33,24 +33,24 @@
     </thead>
     <tbody *ngIf="status == 'pendingActive'">
       <tr *ngFor="let retail of retailersData" (click)="selectData(retail)">
-        <td>{{ retail.id || '-' }}</td>
-        <td>{{ retail.retailer || '-' }}</td>
-        <td>{{ retail.retailersName || '-' }}</td>
+        <td>{{ retail.transid || '-' }}</td>
+        <td>{{ retail.membershipid || '-' }}</td>
+        <td>{{ retail.name || '-' }}</td>
         <td>{{ retail.invoice || '-' }}</td>
         <td>{{ retail.salesAmt || '-' }}</td>
-        <td>{{ retail.dateSubmitted || '-' }}</td>
+        <td>{{ retail.submitteddate | date: "MM/dd/yyyy" || '-' }}</td>
         <td class="text-center">VIEW</td>
       </tr>
     </tbody>
     <tbody *ngIf="status == 'approvedActive' || status == 'deniedActive'">
       <tr *ngFor="let retail of retailersData" (click)="selectData(retail)">
-        <td>{{ retail.id || '-' }}</td>
-        <td>{{ retail.grower || '-' }}</td>
-        <td>{{ retail.growersName || '-' }}</td>
+        <td>{{ retail.transid || '-' }}</td>
+        <td>{{ retail.membershipid || '-' }}</td>
+        <td>{{ retail.name || '-' }}</td>
         <td>{{ retail.invoice || '-' }}</td>
         <td>{{ retail.salesAmt || '-' }}</td>
         <td>{{ retail.points || '-' }}</td>
-        <td>{{ retail.modified || '-' }}</td>
+        <td>{{ retail.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>
         <td class="text-center">VIEW</td>
       </tr>
     </tbody>

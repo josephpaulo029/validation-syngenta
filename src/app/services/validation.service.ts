@@ -10,16 +10,28 @@ interface myData {
 })
 export class ValidationService {
   link: any;
+  link2:any;
+  _value: any;
+
+  set getSelectedData(value: any) {
+    this._value = value;
+  }
+
+  get getSelectedData(): any {
+    return this._value;
+  }
 
   constructor(private http: HttpClient) {
     this.link = "http://128.199.228.223:3000"
+    // this.link = "http://192.168.43.202:3000"
     // this.link = "http://localhost:3000"
   }
 
   getGrowersData(info) {
     let status = info;
     return new Promise(resolve => {
-      this.http.get<myData>(this.link + '/api/rewards/growers/claim/' + status).subscribe(
+      this.http.get<myData>(this.link + '/get/grower/claim/' + status).subscribe(
+
         data => {
           resolve(data);
           // console.log('growersData', data);
@@ -31,10 +43,38 @@ export class ValidationService {
     });
   }
 
+  getGrowerProduct(id) {
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link + '/get/grower/trans/items/' + id).subscribe(
+        data => {
+          resolve(data);
+          // console.log('retailersData', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
   getRetailersData(info) {
     let status = info;
     return new Promise(resolve => {
-      this.http.get<myData>(this.link + '/api/rewards/retailers/claim/' + status).subscribe(
+      this.http.get<myData>(this.link + '/get/retailer/claim/' + status).subscribe(
+        data => {
+          resolve(data);
+          // console.log('retailersData', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  getRetailerProduct(id) {
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link + '/get/retailer/trans/items/' + id).subscribe(
         data => {
           resolve(data);
           // console.log('retailersData', data);
@@ -51,7 +91,7 @@ export class ValidationService {
     if (info.status == 4) {
       data = {
         status: info.status,
-        remards: info.remarks
+        remarks: info.remarks
       };
     } else {
       data = {
@@ -62,7 +102,7 @@ export class ValidationService {
     console.log(info);
     console.log(data);
     return new Promise(resolve => {
-      this.http.patch(this.link + '/api/rewards/growers/claim/' + info.id + '', data).subscribe(
+      this.http.patch(this.link + '/api/rewards/growers/claim/' + info.transid + '', data).subscribe(
         data => {
           resolve(data);
           console.log('res', data);
@@ -88,7 +128,7 @@ export class ValidationService {
     }
 
     return new Promise(resolve => {
-      this.http.patch(this.link + '/api/rewards/retailers/claim/' + info.id + '', data).subscribe(
+      this.http.patch(this.link + '/api/rewards/retailers/claim/' + info.transid + '', data).subscribe(
         data => {
           resolve(data);
           console.log('res', data);
@@ -104,7 +144,7 @@ export class ValidationService {
     console.log(trans);
     let data = {
       id: "",
-      transNo: trans.id,
+      transNo: trans.transid,
       grossTotal: trans.grossSales,
       remarks: ""
     }
@@ -119,7 +159,7 @@ export class ValidationService {
             if (!product.amount) {
               product.amount = 0;
             };
-            product.transNo = trans.id;
+            product.transNo = trans.transid;
             this.addItem(product)
           });
         },
@@ -134,7 +174,7 @@ export class ValidationService {
     console.log(item);
     let data = {
       id: "",
-      itemNo: item.id,
+      itemNo: item.prodid,
       transNo: item.transNo,
       name: "",
       quantity: item.quantity,

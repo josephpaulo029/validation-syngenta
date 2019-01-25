@@ -3,6 +3,7 @@ import { Component, OnInit, Output, Input, EventEmitter, ViewEncapsulation } fro
 import { Subject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ValidationService } from './../services/validation.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-growers',
@@ -26,27 +27,75 @@ export class GrowersComponent implements OnInit {
   modalHeader: any;
   totalGross: any = 0;
   @Input() dashboard: boolean;
+  dashboardSelect: any;
+  routerParams: any;
+  attachedImg: any;
+  sampleData = [{
+    "id": 3,
+    "receipt_number": "test3",
+    "receipt_photo": "https://www.qb-enterprise.com/syngenta/static/images/avatar5.png",
+    "remarks": "",
+    "products": [
+      {
+        "id": 1,
+        "quantity": 14
+      }
+    ],
+    "grower": 1,
+    "created": "2019-01-12T06:29:54.228103Z",
+    "modified": "2019-01-12T06:29:54.228322Z",
+    "type": "claim",
+    "points": 84,
+    "status": 2
+  }];
 
-  constructor(private validationService: ValidationService) {
+  constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) {
     // config.backdrop = 'static';
     // config.keyboard = false;
     // config.centered = true;
   }
 
   ngOnInit(): void {
+    this.defaultnavStatus();
+    this.pendingActive = true;
+    this.routerParams = this.route.queryParams.subscribe(params => {
+      console.log(params);
+      // Defaults to 0 if no query param provided.
+      this.viewData = this.validationService.getSelectedData;
+      console.log(this.validationService.getSelectedData);
+      if (this.viewData != undefined) {
+        this.dashboardSelect = this.viewData.onselect || false;
+        this.attachedImg = this.viewData.receipt_photo;
+        console.log(this.dashboardSelect);
+        this.defaultnavStatus();
+        this.viewDataActive = true;
+        if (this.dashboard) {
+          console.log(this.dashboard);
+
+          this.defaultnavStatus();
+          this.pendingActive = true;
+          this.validationService.getSelectedData = undefined;
+        }
+      }
+      if (!this.dashboard && !this.viewData) {
+        console.log(this.dashboard);
+
+        this.defaultnavStatus();
+        this.pendingActive = true;
+      }
+    });
     this.loadPending();
     this.loadApproved();
     this.loadDenied();
-    this.defaultnavStatus();
-    this.pendingActive = true;
-    if (this.dashboard == undefined) {
-      this.dashboard = false;
-    }
     // console.log(this.dashboard);
     this.dtOptions = {
       pagingType: 'full_numbers',
     };
 
+  }
+
+  ngOnDestroy() {
+    this.routerParams.unsubscribe();
   }
 
   getViewData(info) {
@@ -56,6 +105,7 @@ export class GrowersComponent implements OnInit {
     Promise.resolve(this.validationService.getGrowersData(2))
       .then(data => {
         this.pendingGrowersData = data;
+        // this.pendingGrowersData = this.sampleData;
         console.log(this.pendingGrowersData);
         // this.dtTrigger.next();
         // console.log(data);
@@ -124,13 +174,14 @@ export class GrowersComponent implements OnInit {
   }
 
   selectData(info) {
-    if (!this.dashboard) {
-      // console.log(info);
-      this.viewDataActive = true;
-      // info.attachment = "/assets/images/attc.png";
-      this.viewData = info;
-      this.viewData.products.push({ id: 2, quantity: 3 })
-    }
+    // if (!this.dashboard) {
+    // console.log(info);
+    this.viewDataActive = true;
+    // info.receipt_photo = "/assets/img/attc.png";
+    this.attachedImg = info.receipt_photo;
+    this.viewData = info;
+    // this.viewData.products.push({ id: 2, quantity: 3 })
+    // }
   }
 
   addAmt(prod, form: NgForm) {
@@ -165,7 +216,7 @@ export class GrowersComponent implements OnInit {
       });
   }
 
-  approveTrans(content, status) {
+  approveTrans(status) {
     this.viewData.grossSales = this.totalGross;
     this.viewData.status = 1;
     Promise.resolve(this.validationService.growersValidate(this.viewData))
@@ -176,6 +227,7 @@ export class GrowersComponent implements OnInit {
         Promise.resolve(this.validationService.addTrans(this.viewData))
           .then(data => {
             console.log(data);
+            this.goBack();
           })
           .catch(e => {
             console.log(e);
@@ -186,17 +238,11 @@ export class GrowersComponent implements OnInit {
       });
 
     status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
-    // this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'darkModal' }).result.then((result) => {
-    //   this.closeResult = `Closed with: ${result}`;
-    //   this.goBack();
-    // }, (reason) => {
-    //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    // });
   }
 
-  denyTrans(content, form: NgForm, status) {
+  denyTrans(form: NgForm, status) {
     console.log(status);
-    if (status == false) {
+    if (!status) {
       status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
       this.viewData.status = 4;
       this.viewData.remarks = form.value.reason;
@@ -205,37 +251,12 @@ export class GrowersComponent implements OnInit {
           console.log(data);
           this.dtTrigger.unsubscribe();
           this.loadPending();
+          this.goBack();
         })
         .catch(e => {
           console.log(e);
         });
     }
-    // this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'darkModal' }).result.then((result) => {
-    //   this.closeResult = `Closed with: ${result}`;
-    //   if (status == false) {
-    //     this.goBack();
-    //   }
-    // }, (reason) => {
-    //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    // });
   }
-
-  viewAttachment(content) {
-    // this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'transparent' }).result.then((result) => {
-    //   this.closeResult = `Closed with: ${result}`;
-    // }, (reason) => {
-    //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    // });
-  }
-
-  // private getDismissReason(reason: any): string {
-  //   if (reason === ModalDismissReasons.ESC) {
-  //     return 'by pressing ESC';
-  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-  //     return 'by clicking on a backdrop';
-  //   } else {
-  //     return `with: ${reason}`;
-  //   }
-  // }
 
 }
