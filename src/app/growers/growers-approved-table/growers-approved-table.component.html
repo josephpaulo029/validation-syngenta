@@ -1,0 +1,28 @@
+<div class="growersTbl">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr *ngIf="status == 'approvedActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>GROWERS NAME</th>
+        <th>INVOICE #</th>
+        <th>POINTS EARNED</th>
+        <th>INVOICE DATE</th>
+        <th>VALIDATED DATE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="status == 'approvedActive'">
+      <tr *ngFor="let apprv of growersData" (click)="selectData(apprv)">
+        <td>{{ apprv.transid || '-' }}</td>
+        <td>{{ apprv.membershipid || '-' }}</td>
+        <td>{{ apprv.name || '-' }}</td>
+        <td>{{ apprv.invoice || '-' }}</td>
+        <td>{{ apprv.total_points || '-' }}</td>
+        <td>{{ apprv.invoicedate | date: "MM/dd/yyyy" || '-' }}</td>
+        <td>{{ apprv.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>
+        <td class="text-center">VIEW</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

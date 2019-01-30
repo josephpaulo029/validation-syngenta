@@ -1,0 +1,26 @@
+<div class="growersTbl">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr *ngIf="status == 'deniedActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>GROWERS NAME</th>
+        <th>INVOICE #</th>
+        <th>INVOICE DATE</th>
+        <th>VALIDATED DATE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="status == 'deniedActive'">
+      <tr *ngFor="let denied of growersData" (click)="selectData(denied)">
+        <td>{{ denied.transid || '-' }}</td>
+        <td>{{ denied.membershipid || '-' }}</td>
+        <td>{{ denied.name || '-' }}</td>
+        <td>{{ denied.invoice || '-' }}</td>
+        <td>{{ denied.invoicedate | date: "MM/dd/yyyy" || '-' }}</td>
+        <td>{{ denied.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>
+        <td class="text-center">VIEW</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

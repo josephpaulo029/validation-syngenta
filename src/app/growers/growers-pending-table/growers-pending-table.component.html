@@ -1,0 +1,24 @@
+<div class="growersTbl">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr *ngIf="status == 'pendingActive'">
+          <th>TRANSACTION ID</th>
+          <th>MEMBER ID</th>
+          <th>GROWERS NAME</th>
+          <th>INVOICE #</th>
+          <th>SUBMITTED DATE</th>
+          <th>ACTION</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="status == 'pendingActive'">
+        <tr *ngFor="let pending of growersData" (click)="selectData(pending)">
+          <td>{{ pending.transid || '-' }}</td>
+          <td>{{ pending.membershipid || '-' }}</td>
+          <td>{{ pending.name || '-' }}</td>
+          <td>{{ pending.invoice || '-' }}</td>
+          <td>{{ pending.submitteddate | date: "MM/dd/yyyy" || '-' }}</td>
+          <td class="text-center">VIEW</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

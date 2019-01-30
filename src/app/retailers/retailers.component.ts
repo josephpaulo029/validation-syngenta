@@ -100,7 +100,7 @@ export class RetailersComponent implements OnInit {
       .then(data => {
         this.pendingRetailersData = data;
         // this.pendingRetailersData = this.sampleData;
-        // console.log(data);
+        console.log(data);
       })
       .catch(e => {
         console.log(e);

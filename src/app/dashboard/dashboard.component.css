@@ -13,6 +13,7 @@
 
 .stats .col-xl .card {
     margin-top: 0px;
+    cursor: pointer;
 }
 
 app-growers > .main-content {

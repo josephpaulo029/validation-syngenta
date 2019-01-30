@@ -7,6 +7,7 @@ import {
   MatInputModule,
   MatRippleModule,
   MatTooltipModule,
+  MatDatepickerModule
 } from '@angular/material';
 import { LayoutRoutingModule } from './layout-routing.module';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -21,6 +22,7 @@ import { RetailersModule } from '../retailers/retailers.module';
     MatRippleModule,
     MatInputModule,
     MatTooltipModule,
+    MatDatepickerModule,
     GrowersModule,
     RetailersModule,
 

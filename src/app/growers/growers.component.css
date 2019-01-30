@@ -219,3 +219,27 @@ tbody td {
 .spacer {
     height: 20px;
 }
+
+.dataVal {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.dataVal .mat-icon-button {
+    width: 0px;
+}
+
+.productTbl thead th {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.productTbl tbody td {
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: default;
+}
+
+.transDetails .row {
+    margin-bottom: 5px;
+}

@@ -4,104 +4,96 @@
     <div class="row stats">
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" style="cursor: default;">
           <div class="card-header card-header-warning">
             <p class="category" style="text-align: center; font-weight: 400;">RETAILERS TOTAL SUBMISSIONS</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/retailers']">
           <div class="card-header card-header-warning">
             <p class="category" style="text-align: center; font-weight: 400;">RETAILERS TOTAL PENDING</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/retailers']">
           <div class="card-header card-header-warning">
             <p class="category" style="text-align: center; font-weight: 400;">RETAILERS TOTAL APPROVED</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/retailers']">
           <div class="card-header card-header-warning">
             <p class="category" style="text-align: center; font-weight: 400;">RETAILERS TOTAL DENIED</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" style="cursor: default;">
           <div class="card-header card-header-success">
             <p class="category" style="text-align: center; font-weight: 400;">GROWERS TOTAL SUBMISSIONS</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">{{growerApproved + growerDenied || 0}}</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/growers']">
           <div class="card-header card-header-success">
             <p class="category" style="text-align: center; font-weight: 400;">GROWERS TOTAL PENDING</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">{{growerPending || 0}}</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/growers']">
           <div class="card-header card-header-success">
             <p class="category" style="text-align: center; font-weight: 400;">GROWERS TOTAL APPROVED</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">{{growerApproved || 0}}</h4>
           </div>
         </div>
       </div>
 
       <div class="col-xl">
-        <div class="card">
+        <div class="card" [routerLink]="[ '/growers']">
           <div class="card-header card-header-success">
             <p class="category" style="text-align: center; font-weight: 400;">GROWERS TOTAL DENIED</p>
-            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">0</h4>
           </div>
           <div class="card-body" style="text-align: center;">
-            More Info
+            <h4 class="card-title" style="text-align: center; font-size: 1rem; font-weight: 700;">{{growerDenied || 0}}</h4>
           </div>
         </div>
       </div>
 
     </div>
 
-    <app-growers [dashboard]="dashboardStatus"></app-growers>
+    <app-growers [dashboard]="dashboardStatus" (pendingLength)="getLength(2, $event)" (approveLength)="getLength(1, $event)" (deniedlength)="getLength(4, $event)"></app-growers>
     <app-retailers [dashboard]="dashboardStatus"></app-retailers>
 
     <div class="spacer"></div>

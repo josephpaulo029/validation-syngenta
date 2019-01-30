@@ -1,50 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { ValidationService } from './../services/validation.service';
-import { Subject } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject();
-  growersData: any;
+  growerPending: any;
+  growerApproved: any;
+  growerDenied: any;
   retailersData: any;
   dashboardStatus: boolean;
   constructor(private validationService: ValidationService) { }
 
   ngOnInit(): void {
-    this.loadGrowersData();
-    this.loadRetailersData();
     this.dashboardStatus = true;
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
-  loadGrowersData() {
-    Promise.resolve(this.validationService.getGrowersData(2))
-      .then(data => {
-        this.growersData = data;
-        this.dtTrigger.next();
-        console.log(data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
+  getLength(status, data) {
+    console.log(data);
+    console.log(status);
+    switch (status) {
+      case 2: {
+        this.growerPending = data.length;
+        console.log(this.growerPending);
+        break;
+      }
+      case 1: {
+        this.growerApproved = data.length;
+        console.log(this.growerApproved);
+        break;
+      }
+      case 4: {
+        this.growerDenied = data.length;
+        console.log(this.growerDenied);
+        break;
+      }
 
-  loadRetailersData() {
-    Promise.resolve(this.validationService.getRetailersData(2))
-      .then(data => {
-        this.retailersData = data;
-        this.dtTrigger.next();
-        console.log(data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+        break;
+    }
+
   }
 
 }

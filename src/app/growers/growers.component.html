@@ -9,13 +9,13 @@
           <div class="nav-tabs-wrapper">
             <ul class="nav nav-tabs" data-tabs="tabs">
               <li class="nav-item" (click)="clickPending()">
-                <a class="nav-link active" href="#pending" data-toggle="tab">Pending</a>
+                <a class="nav-link active" [href]="activeHref" data-toggle="tab">Pending</a>
               </li>
               <li class="nav-item" (click)="clickApproved()">
-                <a class="nav-link" href="#approved" data-toggle="tab">Approved</a>
+                <a class="nav-link" [href]="activeHref" data-toggle="tab">Approved</a>
               </li>
               <li class="nav-item" (click)="clickDenied()">
-                <a class="nav-link" href="#denied" data-toggle="tab">Denied</a>
+                <a class="nav-link" [href]="activeHref" data-toggle="tab">Denied</a>
               </li>
             </ul>
           </div>
@@ -36,8 +36,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-table [dashboard]="dashboard" [status]="'pendingActive'" [growersData]="pendingGrowersData"
-                  (viewData)="selectData($event)"></app-growers-table>
+                <app-growers-pending-table [dashboard]="dashboard" [status]="'pendingActive'" (viewData)="selectData($event)"></app-growers-pending-table>
               </div>
             </div>
           </div>
@@ -48,8 +47,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-table [dashboard]="dashboard" [status]="'approvedActive'" [growersData]="approveGrowersData"
-                  (viewData)="selectData($event)"></app-growers-table>
+                <app-growers-approved-table [dashboard]="dashboard" [status]="'approvedActive'" (viewData)="selectData($event)"></app-growers-approved-table>
               </div>
             </div>
           </div>
@@ -60,8 +58,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-table [dashboard]="dashboard" [status]="'deniedActive'" [growersData]="deniedGrowersData"
-                  (viewData)="selectData($event)"></app-growers-table>
+                <app-growers-denied-table [dashboard]="dashboard" [status]="'deniedActive'" (viewData)="selectData($event)"></app-growers-denied-table>
               </div>
             </div>
           </div>
@@ -69,95 +66,211 @@
       </div>
     </div>
 
+    <div *ngIf="viewDataActive">
+      <div class="row btnStyles" *ngIf="viewDataActive">
+        <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"><i class="material-icons">arrow_back_ios</i>&nbsp;&nbsp;BACK</button>
+      </div>
 
-    <div class="card" [ngClass]="{ viewDataTable: viewDataActive}" *ngIf="viewDataActive" style="margin-top: 0px; background: transparent;
-      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0);">
-      <!-- <div class="card-header card-header-gray">
-          <h4 class="card-title ">TRANSACTION DETAILS</h4>
-        </div> -->
-      <h5 class="goBack" *ngIf="viewDataActive" (click)="goBack()">GO BACK</h5>
+      <div class="spacer"></div>
 
-      <div class="card-body" style="padding-top: 0px;">
-        <div class="row viewDataStyle"><span>&nbsp;&nbsp;TRANSACTION DETAILS</span></div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">TRANSACTION ID</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.transid || '-' }}</div>
+      <div class="card">
+        <div class="card-header card-header-blue">
+          <h4 class="card-title">Transaction Details</h4>
         </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">GROWERS NAME</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.name || '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">MEMBER ID</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.membershipid || '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">RETAILER</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.receipt_from || '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">FIELD FORCE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.fieldForce || '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">INVOICE NUMBER</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.invoice || '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">INVOICE DATE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.submitteddate | date: "MM/dd/yyyy" || '-'
-            }}</div>
-        </div>
-        <div class="row viewDataCol3" *ngIf="viewData.status == 1 || viewData.status == 4">
-          <div class="col col-2">VALIDATED DATE</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.modifieddate | date: "MM/dd/yyyy" ||
-            '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">TOTAL GROSS SALES</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ totalGross || '0' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">ATTACHED INVOICE</div>
-          <div class="col col-10" style="cursor: pointer;" data-toggle="modal" data-target="#viewAttachment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
-            viewData.receipt_photo ? 'VIEW ATTACHMENT': '-' }}</div>
-        </div>
-        <div class="row viewDataCol3">
-          <div class="col col-2">TOTAL POINTS EARNED</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.totalPoints || 0 }}</div>
-        </div>
-        <div class="row viewDataCol3" *ngIf="viewData.status == 1 || viewData.status == 4">
-          <div class="col col-2">STATUS</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.status == 1 ? 'APPROVED':
-            viewData.status
-            == 4 ? 'DENIED' : '-' }}</div>
-        </div>
-        <div class="row viewDataCol3" *ngIf="viewData.status == 4">
-          <div class="col col-2">REASON</div>
-          <div class="col col-10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.remarks }}</div>
-        </div>
-        <div class="row viewDataProductsheader">
-          <div class="col col-4">PRODUCT NAME</div>
-          <div class="col">QUANTITY</div>
-          <div class="col">AMOUNT</div>
-          <div class="col">EARNED POINTS</div>
-        </div>
-        <div class="row viewDataProductsbody" *ngFor="let prod of viewData.products">
-          <div class="col col-4">{{ prod.name || '-' }}</div>
-          <div class="col">{{ prod.quantity || '-' }}</div>
-          <div class="col">
-            <form #amt="ngForm"><input type="number" name="amount" (change)="addAmt(prod,amt)" ngModel></form>
+        <div class="card-body transDetails">
+          <div class="spacer"></div>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Transaction ID</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.transid || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Growers Name</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.name || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Member ID</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.membershipid || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Retailer</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.retailer_name || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Field Force</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.fieldforce_name || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Invoice Number</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.invoice || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4" *ngIf="viewData.status == 1 || viewData.status == 4">
+                  <h4>Invoice Date</h4>
+                </div>
+                <div class="col col-4" *ngIf="viewData.status == 2">
+                  <h4 style="line-height: 40px;">Invoice Date</h4>
+                </div>
+                <div class="col dataVal" *ngIf="viewData.status == 1 || viewData.status == 4">
+                  <mat-label style="margin-right: 15px;">{{viewData.invoicedate
+                    | date: "MM/dd/yyyy"
+                    || '-'}}</mat-label>
+                </div>
+                <div class="col dataVal" *ngIf="viewData.status == 2">
+                  <mat-label *ngIf="!dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">--/--/----</mat-label>
+                  <mat-label *ngIf="dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">{{dateVal
+                    | date: "MM/dd/yyyy"
+                    || '-'}}</mat-label>
+                  <mat-datepicker touchUi #picker></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="picker" style="color: #ffa726;"></mat-datepicker-toggle>
+                  <input type="hidden" (dateInput)="getDate('input', $event)" (dateChange)="getDate('change', $event)"
+                    [matDatepicker]="picker">
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Submission Date</h4>
+                </div>
+                <div class="col dataVal">
+                  {{ viewData.submitteddate | date: "MM/dd/yyyy" || '-' }}
+                </div>
+              </div>
+              <div class="row" *ngIf="viewData.status == 1 || viewData.status == 4">
+                <div class="col col-4">
+                  <h4>Validated Date</h4>
+                </div>
+                <div class="col dataVal">
+                  {{ viewData.modifieddate | date: "MM/dd/yyyy" || '-' }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Gross Sales</h4>
+                </div>
+                <div class="col dataVal" *ngIf="viewData.status == 2">{{ totalGross || '0' }}</div>
+                <div class="col dataVal" *ngIf="viewData.status == 1 || viewData.status == 4">{{ viewData.total_amt ||
+                  '0' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Attached Invoice</h4>
+                </div>
+                <div *ngIf="viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;"
+                  data-toggle="modal" data-target="#viewAttachment">{{
+                  viewData.receipt_photo ? 'View Attachment': '-' }}
+                </div>
+                <div *ngIf="!viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;">{{
+                  viewData.receipt_photo ? 'View Attachment': '-' }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Total Points Earned</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.total_points || 0 }}</div>
+              </div>
+              <div class="row" *ngIf="viewData.status == 1 || viewData.status == 4">
+                <div class="col col-4">
+                  <h4>Status</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.status == 1 ? 'Approved':
+                  viewData.status
+                  == 4 ? 'Denied' : '-' }}</div>
+              </div>
+              <div class="row" *ngIf="viewData.status == 4">
+                <div class="col col-4">
+                  <h4>Reason</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.remarks }}</div>
+              </div>
+            </div>
           </div>
-          <div class="col">{{ prod.points || '-' }}</div>
+
         </div>
 
-        <div class="spacer"></div>
-
-        <div class="row btnStyles" *ngIf="viewData.status == 2">
-          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approveModal" (click)="approveTrans(true)">APPROVED</button>
-          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#denyModal">DENIED</button>
+        <div class="table-responsive">
+          <table class="table productTbl">
+            <thead class="text-info" style="text-align: center; background: #fcfbfb;">
+              <th width="40%">
+                Product Name
+              </th>
+              <th width="20%">
+                Quantity
+              </th>
+              <th width="20%">
+                Amount
+              </th>
+              <th width="20%">
+                Earned Points
+              </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prod of viewData.products">
+                <td>
+                  {{prod.name}}
+                </td>
+                <td>
+                  {{prod.quantity}}
+                </td>
+                <td *ngIf="viewData.status == 2">
+                  <form #amt="ngForm"><input style="text-align: center;" class="form-control" type="number" name="amount"
+                      (change)="addAmt(prod,amt)" placeholder="0" ngModel>
+                  </form>
+                </td>
+                <td *ngIf="viewData.status == 1">
+                  {{prod.amount || 0}}
+                </td>
+                <td *ngIf="viewData.status == 4">
+                  {{0}}
+                </td>
+                <td *ngIf="viewData.status == 2 || viewData.status == 1">
+                  {{prod.points * prod.quantity || 0}}
+                </td>
+                <td *ngIf="viewData.status == 4">
+                  {{0}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <!-- <div class="alert alert-danger fade show">
+        <div class="container">
+          <div class="alert-icon">
+            <i style="color: #fff;" class="material-icons">error_outline</i>
+          </div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"><i style="color: #fff;" class="material-icons">clear</i></span>
+          </button>
+          <b>Error</b> {{errMsg}}
+        </div>
+      </div> -->
+
+      <div class="row btnStyles" *ngIf="viewData.status == 2">
+        <!-- <button type="button" class="btn btn-success btn-lg" (click)="validateData()"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button> -->
+        <button id="approveBtn" [hidden]="false" type="button" class="btn btn-success btn-lg" data-toggle="modal"
+          data-target="#approveModal" (click)="approveTrans(true)"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
+        <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
     </div>
 
   </div>

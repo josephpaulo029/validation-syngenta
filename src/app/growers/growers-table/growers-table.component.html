@@ -5,7 +5,6 @@
           <th>TRANSACTION ID</th>
           <th>MEMBER ID</th>
           <th>GROWERS NAME</th>
-          <th>STORE NAME</th>
           <th>INVOICE #</th>
           <th>SUBMITTED DATE</th>
           <th>ACTION</th>
@@ -14,7 +13,6 @@
           <th>TRANSACTION ID</th>
           <th>MEMBER ID</th>
           <th>GROWERS NAME</th>
-          <th>STORE NAME</th>
           <th>INVOICE #</th>
           <th>POINTS EARNED</th>
           <th>VALIDATED DATE</th>
@@ -24,7 +22,6 @@
           <th>TRANSACTION ID</th>
           <th>MEMBER ID</th>
           <th>GROWERS NAME</th>
-          <th>STORE NAME</th>
           <th>INVOICE #</th>
           <th>POINTS EARNED</th>
           <th>VALIDATED DATE</th>
@@ -36,7 +33,6 @@
           <td>{{ pending.transid || '-' }}</td>
           <td>{{ pending.membershipid || '-' }}</td>
           <td>{{ pending.name || '-' }}</td>
-          <td>{{ pending.store || '-' }}</td>
           <td>{{ pending.invoice || '-' }}</td>
           <td>{{ pending.submitteddate | date: "MM/dd/yyyy" || '-' }}</td>
           <td class="text-center">VIEW</td>
@@ -47,7 +43,6 @@
           <td>{{ apprv.transid || '-' }}</td>
           <td>{{ apprv.membershipid || '-' }}</td>
           <td>{{ apprv.name || '-' }}</td>
-          <td>{{ apprv.store || '-' }}</td>
           <td>{{ apprv.invoice || '-' }}</td>
           <td>{{ apprv.points || '-' }}</td>
           <td>{{ apprv.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>
@@ -59,7 +54,6 @@
           <td>{{ denied.transid || '-' }}</td>
           <td>{{ denied.membershipid || '-' }}</td>
           <td>{{ denied.name || '-' }}</td>
-          <td>{{ denied.store || '-' }}</td>
           <td>{{ denied.invoice || '-' }}</td>
           <td>{{ denied.points || '-' }}</td>
           <td>{{ denied.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>

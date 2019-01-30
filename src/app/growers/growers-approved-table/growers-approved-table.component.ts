@@ -3,13 +3,14 @@ import { ValidationService } from './../../services/validation.service';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
+
 @Component({
-  selector: 'app-growers-table',
-  templateUrl: './growers-table.component.html',
+  selector: 'app-growers-approved-table',
+  templateUrl: './growers-approved-table.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./growers-table.component.css']
+  styleUrls: ['./growers-approved-table.component.css']
 })
-export class GrowersTableComponent implements OnInit {
+export class GrowersApprovedTableComponent implements OnInit {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -22,21 +23,9 @@ export class GrowersTableComponent implements OnInit {
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.dashboard);
-    switch (this.status) {
-      case 'pendingActive': {
-        this.loadPending();
-      }
-      case 'approvedActive': {
-        this.loadApproved();
-      }
-      case 'deniedActive': {
-        this.loadDenied();
-      }
+    // console.log(this.dashboard);
+    this.loadApproved();
 
-      default:
-        break;
-    }
     this.dtOptions = {
       pagingType: 'full_numbers',
     };
@@ -60,52 +49,21 @@ export class GrowersTableComponent implements OnInit {
     });
   }
 
-  loadPending() {
-    Promise.resolve(this.validationService.getGrowersTrans(2))
+  loadApproved() {
+    let data = {
+      status: 1,
+      type: "grower"
+    }
+    Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.growersData = data;
-        // this.pendingLength.emit(data);
-        // this.pendingGrowersData = this.sampleData;
-        console.log(this.growersData);
         this.rerender();
 
-        // this.dtTrigger.next();
-        // console.log(data);
-
-      })
-      .catch(e => {
-        console.log(e);
-      });
-
-  }
-
-  loadApproved() {
-    Promise.resolve(this.validationService.getGrowersTrans(1))
-      .then(data => {
-        this.growersData = data;
         // this.approveLength.emit(data);
         console.log(this.growersData);
-        this.rerender();
-
         // this.dtTrigger.next();
         // console.log(data);
 
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
-  loadDenied() {
-    Promise.resolve(this.validationService.getGrowersTrans(4))
-      .then(data => {
-        this.growersData = data;
-        // this.deniedlength.emit(data);
-        console.log(this.growersData);
-        // this.rerender();
-
-        // this.dtTrigger.next();
-        // console.log(data);
       })
       .catch(e => {
         console.log(e);
@@ -114,9 +72,24 @@ export class GrowersTableComponent implements OnInit {
 
   selectData(info) {
     console.log(info);
-    Promise.resolve(this.validationService.getGrowerProduct(info.transid))
-      .then(data => {
-        info.products = data;
+    let retailerid;
+    retailerid = info.retailer.split("-")[1];
+    Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
+      console.log(retailerInfo);
+
+      let retailer;
+      retailer = retailerInfo;
+      info.retailer_name = retailer.first_name + ' ' + retailer.last_name;
+      info.retailer_id = retailer.id;
+
+      Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
+        let fieldforce;
+        fieldforce = fforceInfo;
+        info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.last_name;
+        info.fieldforce_id = fieldforce.id;
+        console.log(fieldforce);
+
+        info.products = JSON.parse(info.products);
         info.total_points = 0;
         info.products.forEach(item => {
           info.total_points += parseInt(item.points) * parseInt(item.quantity);
@@ -127,25 +100,15 @@ export class GrowersTableComponent implements OnInit {
           this.validationService.getSelectedData = info;
           this.router.navigate(['/growers']);
         }
-        console.log(data);
-        // this.dtTrigger.next();
 
-      })
-      .catch(e => {
+
+      }).catch(e => {
         console.log(e);
       });
 
-    // info.onselect = true;
-
-    // info.total_points = 0;
-    // info.products.forEach(item => {
-    //   info.total_points += parseInt(item.points) * parseInt(item.quantity);
-    // });
-    // this.viewData.emit(info);
-    // if (this.dashboard) {
-    //   this.validationService.getSelectedData = info;
-    //   this.router.navigate(['/growers']);
-    // }
+    }).catch(e => {
+      console.log(e);
+    });
   }
 
 }
