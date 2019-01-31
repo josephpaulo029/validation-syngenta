@@ -33,4 +33,9 @@ export class SidebarComponent implements OnInit {
     }
     return true;
   };
+
+  ngOnDestroy() {
+    localStorage.removeItem('TOKEN');
+  }
+  
 }

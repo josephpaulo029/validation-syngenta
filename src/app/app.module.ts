@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
 import { DataTablesModule } from 'angular-datatables';
 import { ValidationService } from './services/validation.service';
+import { NeedAuthGuardService } from './services/need-auth-guard.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { ValidationService } from './services/validation.service';
     DataTablesModule,
   ],
   providers: [
-    ValidationService
+    ValidationService,
+    NeedAuthGuardService
   ],
   bootstrap: [
     AppComponent

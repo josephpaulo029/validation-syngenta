@@ -28,7 +28,7 @@ export class RetailersTableComponent implements OnInit {
   }
 
   loadPending() {
-    Promise.resolve(this.validationService.getRetailersData(2))
+    Promise.resolve(this.validationService.getRetailersTrans(2))
       .then(data => {
         // this.pendingGrowersData = data;
         // console.log(this.growersData);

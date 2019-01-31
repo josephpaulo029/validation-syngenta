@@ -1,0 +1,26 @@
+<div class="retailersTbl">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+      <tr *ngIf="status == 'approvedActive'">
+        <th>TRANSACTION ID</th>
+        <th>MEMBER ID</th>
+        <th>GROWERS NAME</th>
+        <th>INVOICE #</th>
+        <th>POINTS EARNED</th>
+        <th>VALIDATED DATE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="status == 'approvedActive'">
+      <tr *ngFor="let retail of retailersData" (click)="selectData(retail)">
+        <td>{{ retail.transid || '-' }}</td>
+        <td>{{ retail.membershipid || '-' }}</td>
+        <td>{{ retail.name || '-' }}</td>
+        <td>{{ retail.invoice || '-' }}</td>
+        <td>{{ retail.total_points || '-' }}</td>
+        <td>{{ retail.modifieddate | date: "MM/dd/yyyy" || '-' }}</td>
+        <td class="text-center">VIEW</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -5,22 +5,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-growers-pending-table',
-  templateUrl: './growers-pending-table.component.html',
+  selector: 'app-retailers-pending-table',
+  templateUrl: './retailers-pending-table.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./growers-pending-table.component.css']
+  styleUrls: ['./retailers-pending-table.component.css']
 })
-export class GrowersPendingTableComponent implements OnInit {
+export class RetailersPendingTableComponent implements OnInit {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-  @Input() growersData: any;
+  @Input() retailersData: any;
   @Input() status: any;
   @Output() viewData = new EventEmitter<any>();
   @Input() dashboard: boolean;
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
+
 
   ngOnInit(): void {
     // console.log(this.dashboard);
@@ -51,13 +52,13 @@ export class GrowersPendingTableComponent implements OnInit {
 
   loadPending() {
 
-    Promise.resolve(this.validationService.getGrowersTrans(2))
+    Promise.resolve(this.validationService.getRetailersTrans(2))
       .then(data => {
-        this.growersData = data;
+        this.retailersData = data;
         this.rerender();
         // this.pendingLength.emit(data);
         // this.pendingGrowersData = this.sampleData;
-        console.log(this.growersData);
+        console.log(this.retailersData);
 
         // this.dtTrigger.next();
         // console.log(data);
@@ -71,33 +72,31 @@ export class GrowersPendingTableComponent implements OnInit {
 
   selectData(info) {
     console.log(info);
-    info.type = "grower";
+    info.type = "retailer";
     Promise.resolve(this.validationService.checkAvailability(info))
       .then(data => {
         console.log(data);
-        console.log(this.validationService.accountData.id);
         let res;
         res = data;
         if (res.length == 0 || res.length != 0 && res[0].userid == this.validationService.accountData.id) {
-
           let retailerid;
-          retailerid = info.receipt_from.split("-")[1];
+          retailerid = info.userid;
           Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
             console.log(retailerInfo);
 
             let retailer;
             retailer = retailerInfo;
-            info.retailer_name = retailer.first_name + ' ' + retailer.last_name;
+            info.retailer_name = retailer.first_name + ' ' + retailer.middle_name + ' ' + retailer.last_name;
             info.retailer_id = retailer.id;
 
             Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
               let fieldforce;
               fieldforce = fforceInfo;
-              info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.last_name;
+              info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
               info.fieldforce_id = fieldforce.id;
               console.log(fieldforce);
 
-              Promise.resolve(this.validationService.getGrowerProduct(info.transid)).then(data => {
+              Promise.resolve(this.validationService.getRetailerProduct(info.transid)).then(data => {
                 info.products = data;
                 info.total_points = 0;
                 info.products.forEach(item => {
@@ -107,7 +106,7 @@ export class GrowersPendingTableComponent implements OnInit {
                 this.viewData.emit(info);
                 if (this.dashboard) {
                   this.validationService.getSelectedData = info;
-                  this.router.navigate(['/growers']);
+                  this.router.navigate(['/retailers']);
                 }
                 console.log(data);
                 // this.dtTrigger.next();
@@ -128,12 +127,10 @@ export class GrowersPendingTableComponent implements OnInit {
             }).catch(e => {
               console.log(e);
             });
-
-          }).catch(e => {
-            console.log(e);
-          });
-
-
+          })
+            .catch(e => {
+              console.log(e);
+            });
         } else {
           alert('Transaction already handled by other staff');
         }

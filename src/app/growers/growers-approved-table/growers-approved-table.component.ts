@@ -79,13 +79,13 @@ export class GrowersApprovedTableComponent implements OnInit {
 
       let retailer;
       retailer = retailerInfo;
-      info.retailer_name = retailer.first_name + ' ' + retailer.last_name;
+      info.retailer_name = retailer.first_name + ' ' + retailer.middle_name + ' ' + retailer.last_name;
       info.retailer_id = retailer.id;
 
       Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
         let fieldforce;
         fieldforce = fforceInfo;
-        info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.last_name;
+        info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
         info.fieldforce_id = fieldforce.id;
         console.log(fieldforce);
 

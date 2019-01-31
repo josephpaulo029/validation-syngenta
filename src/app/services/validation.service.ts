@@ -14,6 +14,8 @@ export class ValidationService {
   link: any;
   link2: any;
   _value: any;
+  _status: any
+  accountData: any;
 
   headers = new HttpHeaders()
 
@@ -30,10 +32,50 @@ export class ValidationService {
     return this._value;
   }
 
+  set getTabStatus(status: any) {
+    this._status = status;
+  }
+
+  get getTabStatus(): any {
+    return this._status;
+  }
+
   constructor(private http: HttpClient) {
     this.link = "http://128.199.228.223:3000"
     // this.link = "http://192.168.43.202:3000"
     this.link2 = "http://localhost:3000"
+  }
+
+  loginAuth(info) {
+    console.log(info);
+    let data;
+    data = {
+      username: info.email,
+      password: info.password
+    }
+    return new Promise(resolve => {
+      this.http.post<myData>(this.link2 + '/api/login', data, { headers: this.headers }).subscribe(data => {
+        // this.result = data;
+        // this.token = this.result.token;
+        this.accountData = data;
+        this.setToken(this.accountData.token);
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    });
+  }
+
+  setToken(token: string): void {
+    localStorage.setItem('TOKEN', token);
+  }
+
+  isLogged() {
+    return localStorage.getItem('TOKEN') != null;
+  }
+
+  ngOnDestroy() {
+    localStorage.removeItem('TOKEN');
   }
 
   getGrowersTrans(info) {
@@ -94,7 +136,7 @@ export class ValidationService {
     });
   }
 
-  getRetailersData(info) {
+  getRetailersTrans(info) {
     let status = info;
     return new Promise(resolve => {
       this.http.get<myData>(this.link + '/get/retailer/claim/' + status).subscribe(
@@ -192,6 +234,7 @@ export class ValidationService {
       name: trans.name,
       retailer: trans.receipt_from ? trans.receipt_from : "",
       fieldforce: trans.fieldforce_id ? trans.fieldforce_id : "",
+      distributor: trans.distributor ? trans.distributor : "",
       membershipid: trans.membershipid,
       invoice: trans.invoice,
       products: JSON.stringify(trans.products),
@@ -209,6 +252,52 @@ export class ValidationService {
 
     return new Promise(resolve => {
       this.http.post(this.link2 + '/api/addTransDetails', data).subscribe(
+        data => {
+          resolve(data);
+          console.log('res', data);
+
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  checkAvailability(info) {
+    console.log(info);
+    let data;
+    data = {
+      type: info.type,
+      transid: info.transid,
+    }
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link2 + '/api/checkTrans/' + data.type + '/' + data.transid).subscribe(
+        data => {
+          resolve(data);
+          console.log('result', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  addSelected(trans) {
+    console.log(trans);
+
+    let data = {
+      id: "",
+      transid: trans.transid,
+      userid: this.accountData.id,
+      type: trans.type,
+      remarks: trans.remarks ? trans.remarks : "",
+    }
+    console.log(data);
+
+    return new Promise(resolve => {
+      this.http.post(this.link2 + '/api/addSelected', data).subscribe(
         data => {
           resolve(data);
           console.log('res', data);

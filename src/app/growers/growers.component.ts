@@ -64,9 +64,31 @@ export class GrowersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.defaultnavStatus();
-    this.pendingActive = true;
+    console.log(this.validationService.getTabStatus);
+    switch (this.validationService.getTabStatus) {
+      case 2:
+        this.clickPending();
+        document.getElementById('pendingBtn').click();
+        console.log(this.activeHref);
+        break;
+      case 1:
+        this.clickApproved();
+        document.getElementById('approvedBtn').click();
+        console.log(this.activeHref);
+        break;
+      case 4:
+        this.clickDenied();
+        document.getElementById('deniedBtn').click();
+        console.log(this.activeHref);
+        break;
+
+      default:
+        this.clickPending();
+        console.log(this.activeHref);
+
+        break;
+    }
     this.routerParams = this.route.queryParams.subscribe(params => {
       // console.log(params);
       // Defaults to 0 if no query param provided.
@@ -85,6 +107,11 @@ export class GrowersComponent implements OnInit {
           this.pendingActive = true;
           this.validationService.getSelectedData = undefined;
         }
+      }
+      if (this.dashboard) {
+        console.log(this.dashboard);
+        this.validationService.getTabStatus = undefined;
+        this.clickPending();
       }
       if (!this.dashboard && !this.viewData) {
         // console.log(this.dashboard);
@@ -222,15 +249,13 @@ export class GrowersComponent implements OnInit {
   }
 
   selectData(info) {
-    // if (!this.dashboard) {
-    // console.log(info);
+    console.log(info);
+
     this.viewDataActive = true;
-    // info.receipt_photo = "";
     this.attachedImg = info.receipt_photo;
     this.viewData = info;
     console.log(this.viewData);
-    // this.viewData.products.push({ id: 2, quantity: 3, points: 5 })
-    // }
+
   }
 
   addAmt(prod, form: NgForm) {
@@ -275,58 +300,65 @@ export class GrowersComponent implements OnInit {
   approveTrans(status) {
     // let element: HTMLElement = document.getElementById('approveBtn') as HTMLElement;
     // element.click();
-    console.log(status);
+    // console.log(status);
     if (status) {
       this.validateData();
       this.viewData.status = 1;
       if (this.validateData()) {
-        console.log(this.viewData);
-        // Promise.resolve(this.validationService.growersValidate(this.viewData))
-        //   .then(data => {
-        //     console.log(data);
-        //     // this.dtTrigger.unsubscribe();
-        //     this.loadPending();
-        Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-          console.log(data);
-          this.goBack();
-          this.dateVal = undefined;
-        }).catch(e => {
-          console.log(e);
-        });
-        // })
-        // .catch(e => {
-        //   console.log(e);
-        // });
+        // console.log(this.viewData);
+        Promise.resolve(this.validationService.growersValidate(this.viewData))
+          .then(data => {
+            // console.log(data);
+            // this.dtTrigger.unsubscribe();
+            Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+              // console.log(data);
+              // this.loadPending();
+              this.goBack();
+              this.totalGross = 0;
+              this.dateVal = undefined;
+            }).catch(e => {
+              console.log(e);
+            });
+          })
+          .catch(e => {
+            console.log(e);
+          });
       }
 
     }
     status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
   }
 
+  gotoDashbard() {
+    this.router.navigate(['/dashboard']);
+  }
+
   denyTrans(form: NgForm, status) {
     this.validateData();
-    console.log(status);
+    // console.log(status);
     if (this.validateData()) {
       if (!status) {
         status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
         this.viewData.status = 4;
         this.viewData.total_points = 0;
         this.viewData.remarks = form.value.reason;
-        // Promise.resolve(this.validationService.growersValidate(this.viewData))
-        //   .then(data => {
-        //     console.log(data);
-        console.log( this.viewData);
-        Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-          console.log(data);
-          this.goBack();
-          this.dateVal = undefined;
-        }).catch(e => {
-          console.log(e);
-        });
-        // })
-        // .catch(e => {
-        //   console.log(e);
-        // });
+        Promise.resolve(this.validationService.growersValidate(this.viewData))
+          .then(data => {
+            // console.log(data);
+            // console.log(this.viewData);
+            Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+              // console.log(data);
+              this.router.navigate(['/dashboard']);
+              this.goBack();
+              this.totalGross = 0;
+              this.dateVal = undefined;
+            }).catch(e => {
+              console.log(e);
+            });
+          })
+          .catch(e => {
+            console.log(e);
+          });
       }
     }
   }

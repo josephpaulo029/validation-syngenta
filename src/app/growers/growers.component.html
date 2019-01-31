@@ -8,14 +8,17 @@
         <div class="nav-tabs-navigation">
           <div class="nav-tabs-wrapper">
             <ul class="nav nav-tabs" data-tabs="tabs">
-              <li class="nav-item" (click)="clickPending()">
-                <a class="nav-link active" [href]="activeHref" data-toggle="tab">Pending</a>
+              <li class="nav-item" id="pendingBtn" (click)="clickPending()">
+                <a class="nav-link" [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}" [href]="activeHref"
+                  data-toggle="tab">Pending</a>
               </li>
-              <li class="nav-item" (click)="clickApproved()">
-                <a class="nav-link" [href]="activeHref" data-toggle="tab">Approved</a>
+              <li class="nav-item" id="approvedBtn" (click)="clickApproved()">
+                <a class="nav-link" [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}" [href]="activeHref"
+                  data-toggle="tab">Approved</a>
               </li>
-              <li class="nav-item" (click)="clickDenied()">
-                <a class="nav-link" [href]="activeHref" data-toggle="tab">Denied</a>
+              <li class="nav-item" id="deniedBtn" (click)="clickDenied()">
+                <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}" [href]="activeHref"
+                  data-toggle="tab">Denied</a>
               </li>
             </ul>
           </div>
@@ -29,7 +32,7 @@
             <span>&nbsp;&nbsp;LIST OF TRANSACTIONS</span>
           </div> -->
 
-          <div class="tab-pane active" id="pending">
+          <div [ngClass]="{'tab-pane active': pendingActive, 'tab-pane': !pendingActive}" id="pending">
             <div class="card">
               <div class="card-header card-header-blue">
                 <h4 class="card-title">GROWERS SUBMISSION FOR VALIDATION</h4>
@@ -40,7 +43,7 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="approved">
+          <div [ngClass]="{'tab-pane active': approvedActive, 'tab-pane': !approvedActive}" id="approved">
             <div class="card">
               <div class="card-header card-header-blue">
                 <h4 class="card-title">LIST OF TRANSACTIONS</h4>
@@ -51,7 +54,7 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="denied">
+          <div [ngClass]="{'tab-pane active': deniedActive, 'tab-pane': !deniedActive}" id="denied">
             <div class="card">
               <div class="card-header card-header-blue">
                 <h4 class="card-title">LIST OF TRANSACTIONS</h4>
@@ -160,7 +163,7 @@
               </div>
               <div class="row">
                 <div class="col col-4">
-                  <h4>Gross Sales</h4>
+                  <h4>Total Gross Sales</h4>
                 </div>
                 <div class="col dataVal" *ngIf="viewData.status == 2">{{ totalGross || '0' }}</div>
                 <div class="col dataVal" *ngIf="viewData.status == 1 || viewData.status == 4">{{ viewData.total_amt ||
@@ -291,7 +294,7 @@
         <h5>Grower will be notified via SMS</h5>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="gotoDashbard()">Close</button>
       </div>
     </div>
   </div>

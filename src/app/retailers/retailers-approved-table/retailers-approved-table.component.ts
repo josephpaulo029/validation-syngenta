@@ -5,17 +5,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-growers-denied-table',
-  templateUrl: './growers-denied-table.component.html',
+  selector: 'app-retailers-approved-table',
+  templateUrl: './retailers-approved-table.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./growers-denied-table.component.css']
+  styleUrls: ['./retailers-approved-table.component.css']
 })
-export class GrowersDeniedTableComponent implements OnInit {
+export class RetailersApprovedTableComponent implements OnInit {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-  @Input() growersData: any;
+  @Input() retailersData: any;
   @Input() status: any;
   @Output() viewData = new EventEmitter<any>();
   @Input() dashboard: boolean;
@@ -24,7 +24,7 @@ export class GrowersDeniedTableComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.dashboard);
-    this.loadDenied();
+    this.loadApproved();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -49,18 +49,18 @@ export class GrowersDeniedTableComponent implements OnInit {
     });
   }
 
-  loadDenied() {
+  loadApproved() {
     let data = {
-      status: 4,
-      type: "grower"
+      status: 3,
+      type: "retailer"
     }
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
-        this.growersData = data;
+        this.retailersData = data;
         this.rerender();
 
-        // this.deniedlength.emit(data);
-        console.log(this.growersData);
+        // this.approveLength.emit(data);
+        console.log(this.retailersData);
         // this.dtTrigger.next();
         // console.log(data);
 
@@ -73,7 +73,7 @@ export class GrowersDeniedTableComponent implements OnInit {
   selectData(info) {
     console.log(info);
     let retailerid;
-    retailerid = info.retailer.split("-")[1];
+    retailerid = info.userid;
     Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
       console.log(retailerInfo);
 
@@ -85,20 +85,20 @@ export class GrowersDeniedTableComponent implements OnInit {
       Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
         let fieldforce;
         fieldforce = fforceInfo;
-        info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
+        info.fieldforce = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
         info.fieldforce_id = fieldforce.id;
         console.log(fieldforce);
 
         info.products = JSON.parse(info.products);
         info.total_points = 0;
-        // info.products.forEach(item => {
-        //   info.total_points += parseInt(item.points) * parseInt(item.quantity);
-        // });
+        info.products.forEach(item => {
+          info.total_points += parseInt(item.points) * parseInt(item.quantity);
+        });
         info.onselect = true;
         this.viewData.emit(info);
         if (this.dashboard) {
           this.validationService.getSelectedData = info;
-          this.router.navigate(['/growers']);
+          this.router.navigate(['/retailers']);
         }
 
 

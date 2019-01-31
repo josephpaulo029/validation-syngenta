@@ -62,7 +62,7 @@
 }
 
 
-.growerTable {
+.retailerTable {
     margin-top: 30px !important;
     margin-bottom: 0px !important;
 }
@@ -218,4 +218,48 @@ tbody td {
 
 .spacer {
     height: 20px;
+}
+
+.dataVal {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.dataVal .mat-icon-button {
+    width: 0px;
+}
+
+.productTbl thead th {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.productTbl tbody td {
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: default;
+}
+
+.transDetails .row {
+    margin-bottom: 5px;
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transition: 0.3s background-color 0.2s !important;
+}
+
+.navLink {
+    display: block;
+    border: 0 !important;
+    color: #fff !important;
+    font-weight: 500;
+    margin: 0;
+    border-radius: 3px;
+    line-height: 24px;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 10px 15px;
+    background-color: transparent;
+    transition: 0.3s background-color 0s;
 }
