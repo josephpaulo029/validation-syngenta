@@ -7,6 +7,10 @@ import { ValidationService } from './../services/validation.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { stat } from 'fs';
+import { DatePipe } from '@angular/common';
+import { RetailersApprovedTableComponent } from './retailers-approved-table/retailers-approved-table.component';
+import { RetailersPendingTableComponent } from './retailers-pending-table/retailers-pending-table.component';
+import { RetailersDeniedTableComponent } from './retailers-denied-table/retailers-denied-table.component';
 @Component({
   selector: 'app-retailers',
   templateUrl: './retailers.component.html',
@@ -14,6 +18,10 @@ import { stat } from 'fs';
   styleUrls: ['./retailers.component.css']
 })
 export class RetailersComponent implements OnInit {
+  @ViewChild('pendingTbl') pendingTbl: RetailersPendingTableComponent;
+  @ViewChild('appovedTbl') appovedTbl: RetailersApprovedTableComponent;
+  @ViewChild('deniedTbl') deniedTbl: RetailersDeniedTableComponent;
+  pipe = new DatePipe('en-US'); // Use your own locale
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
   pendingActive: boolean;
@@ -63,6 +71,8 @@ export class RetailersComponent implements OnInit {
     "points": 84,
     "status": 2
   }];
+  dateFrom: any;
+  dateTo: any;
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) {
 
@@ -70,6 +80,13 @@ export class RetailersComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaultnavStatus();
+    let lastweek = new Date();
+    lastweek.setDate(lastweek.getDate() - 7)
+    this.dateFrom = lastweek;
+    this.dateTo = Date.now();
+    this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
+    this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
+
     console.log(this.validationService.getTabStatus);
     switch (this.validationService.getTabStatus) {
       case 2:
@@ -139,9 +156,51 @@ export class RetailersComponent implements OnInit {
   }
 
   getDate(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.dateVal = event.value;
-    console.log(this.dateVal);
+    switch (type) {
+      case 'change':
+        this.dateVal = event.value;
+        break;
+
+      case 'from':
+        this.dateFrom = event.value;
+        this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
+        this.reloadTbl();
+        console.log(this.validationService.getFrom);
+        break;
+
+      case 'to':
+        this.dateTo = event.value;
+        this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
+        this.reloadTbl();
+        console.log(this.validationService.getTo);
+        break;
+
+      default:
+        break;
+    }
+    // console.log(this.dateVal);
     console.log(event);
+  }
+
+  reloadTbl() {
+    this.pendingTbl.loadPending();
+    this.appovedTbl.loadApproved();
+    this.deniedTbl.loadDenied();
+    // console.log(this.activeHref);
+    // switch (this.activeHref) {
+    //   case '#pending':
+    //     this.pendingTbl.loadPending();
+    //     break;
+    //   case '#approved':
+    //     this.appovedTbl.loadApproved();
+    //     break;
+    //   case '#denied':
+    //     this.deniedTbl.loadDenied();
+    //     break;
+
+    //   default:
+    //     break;
+    // }
   }
 
   getDistributor(event: any) {
@@ -263,7 +322,7 @@ export class RetailersComponent implements OnInit {
       this.viewData.status = 3;
       if (this.validateData()) {
         // console.log(this.viewData);
-        Promise.resolve(this.validationService.growersValidate(this.viewData))
+        Promise.resolve(this.validationService.retailersValidate(this.viewData))
           .then(data => {
             // console.log(data);
             // this.dtTrigger.unsubscribe();
@@ -305,7 +364,7 @@ export class RetailersComponent implements OnInit {
             // console.log(this.viewData);
             Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
               // console.log(data);
-              this.router.navigate(['/dashboard']);
+              // this.router.navigate(['/dashboard']);
               this.goBack();
               this.totalGross = 0;
               this.dateVal = undefined;

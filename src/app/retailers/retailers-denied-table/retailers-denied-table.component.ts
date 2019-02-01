@@ -3,7 +3,7 @@ import { ValidationService } from './../../services/validation.service';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-retailers-denied-table',
   templateUrl: './retailers-denied-table.component.html',
@@ -19,12 +19,15 @@ export class RetailersDeniedTableComponent implements OnInit {
   @Input() status: any;
   @Output() viewData = new EventEmitter<any>();
   @Input() dashboard: boolean;
+  fromDate: any;
+  toDate: any;
+  pipe = new DatePipe('en-US'); // Use your own locale
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     // console.log(this.dashboard);
-    this.loadApproved();
+    this.loadDenied();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -49,7 +52,21 @@ export class RetailersDeniedTableComponent implements OnInit {
     });
   }
 
-  loadApproved() {
+  filterbyDate(data) {
+    this.fromDate = this.validationService.getFrom;
+    this.toDate = this.validationService.getTo;
+    console.log(this.fromDate);
+    console.log(this.toDate);
+
+    this.retailersData = data.filter((item: any) => {
+      let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
+      console.log(transDate);
+      return transDate >= this.fromDate &&
+        transDate <= this.toDate;
+    });
+  }
+
+  loadDenied() {
     let data = {
       status: 4,
       type: "retailer"
@@ -57,6 +74,7 @@ export class RetailersDeniedTableComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.retailersData = data;
+        this.filterbyDate(this.retailersData);
         this.rerender();
 
         // this.approveLength.emit(data);

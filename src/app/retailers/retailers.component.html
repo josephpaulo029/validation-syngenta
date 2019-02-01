@@ -7,20 +7,39 @@
         <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
         <div class="nav-tabs-navigation">
           <div class="nav-tabs-wrapper">
-              <ul class="nav nav-tabs" data-tabs="tabs">
-                  <li class="nav-item" id="pendingBtn" (click)="clickPending()">
-                    <a class="nav-link" [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}" [href]="activeHref"
-                      data-toggle="tab">Pending</a>
-                  </li>
-                  <li class="nav-item" id="approvedBtn" (click)="clickApproved()">
-                    <a class="nav-link" [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}" [href]="activeHref"
-                      data-toggle="tab">Approved</a>
-                  </li>
-                  <li class="nav-item" id="deniedBtn" (click)="clickDenied()">
-                    <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}" [href]="activeHref"
-                      data-toggle="tab">Denied</a>
-                  </li>
-                </ul>
+            <ul class="nav nav-tabs" data-tabs="tabs">
+              <li class="nav-item" id="pendingBtn" (click)="clickPending()">
+                <a class="nav-link" [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}"
+                  [href]="activeHref" data-toggle="tab">Pending</a>
+              </li>
+              <li class="nav-item" id="approvedBtn" (click)="clickApproved()">
+                <a class="nav-link" [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}"
+                  [href]="activeHref" data-toggle="tab">Approved</a>
+              </li>
+              <li class="nav-item" id="deniedBtn" (click)="clickDenied()">
+                <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
+                  [href]="activeHref" data-toggle="tab">Denied</a>
+              </li>
+              <li class="datefromStye">
+                <!-- <mat-label>From</mat-label> -->
+                <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
+                <!-- <i class="material-icons">date_range</i> -->
+                <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
+                <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <mat-datepicker touchUi #pickerFrom></mat-datepicker>
+                <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
+                <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)" (dateChange)="getDate('from', $event)"
+                  [matDatepicker]="pickerFrom">
+
+                <mat-label>-</mat-label>
+                <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
+                <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <mat-datepicker touchUi #pickerTo></mat-datepicker>
+                <!-- <mat-datepicker-toggle matSuffix [for]="pickerTo" style="color: #fff;"></mat-datepicker-toggle> -->
+                <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)" (dateChange)="getDate('to', $event)"
+                  [matDatepicker]="pickerTo">
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -39,7 +58,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-pending-table [dashboard]="dashboard" [status]="'pendingActive'" (viewData)="selectData($event)"></app-retailers-pending-table>
+                <app-retailers-pending-table #pendingTbl [dashboard]="dashboard" [status]="'pendingActive'" (viewData)="selectData($event)"></app-retailers-pending-table>
               </div>
             </div>
           </div>
@@ -50,7 +69,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-approved-table [dashboard]="dashboard" [status]="'approvedActive'" (viewData)="selectData($event)"></app-retailers-approved-table>
+                <app-retailers-approved-table #appovedTbl [dashboard]="dashboard" [status]="'approvedActive'" (viewData)="selectData($event)"></app-retailers-approved-table>
               </div>
             </div>
           </div>
@@ -61,7 +80,7 @@
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-denied-table [dashboard]="dashboard" [status]="'deniedActive'" (viewData)="selectData($event)"></app-retailers-denied-table>
+                <app-retailers-denied-table #deniedTbl [dashboard]="dashboard" [status]="'deniedActive'" (viewData)="selectData($event)"></app-retailers-denied-table>
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { ValidationService } from './../../services/validation.service';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-retailers-pending-table',
   templateUrl: './retailers-pending-table.component.html',
@@ -19,6 +19,9 @@ export class RetailersPendingTableComponent implements OnInit {
   @Input() status: any;
   @Output() viewData = new EventEmitter<any>();
   @Input() dashboard: boolean;
+  fromDate: any;
+  toDate: any;
+  pipe = new DatePipe('en-US'); // Use your own locale
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
 
@@ -50,11 +53,26 @@ export class RetailersPendingTableComponent implements OnInit {
     });
   }
 
+  filterbyDate(data) {
+    this.fromDate = this.validationService.getFrom;
+    this.toDate = this.validationService.getTo;
+    console.log(this.fromDate);
+    console.log(this.toDate);
+
+    this.retailersData = data.filter((item: any) => {
+      let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
+      console.log(transDate);
+      return transDate >= this.fromDate &&
+        transDate <= this.toDate;
+    });
+  }
+
   loadPending() {
 
     Promise.resolve(this.validationService.getRetailersTrans(2))
       .then(data => {
         this.retailersData = data;
+        this.filterbyDate(this.retailersData);
         this.rerender();
         // this.pendingLength.emit(data);
         // this.pendingGrowersData = this.sampleData;
@@ -78,7 +96,7 @@ export class RetailersPendingTableComponent implements OnInit {
         console.log(data);
         let res;
         res = data;
-        if (res.length == 0 || res.length != 0 && res[0].userid == this.validationService.accountData.id) {
+        if (res.length == 0 || res.length != 0 && res[0].userid == localStorage.getItem('userid')) {
           let retailerid;
           retailerid = info.userid;
           Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {

@@ -14,7 +14,9 @@ export class ValidationService {
   link: any;
   link2: any;
   _value: any;
-  _status: any
+  _status: any;
+  _from: any;
+  _to: any;
   accountData: any;
 
   headers = new HttpHeaders()
@@ -40,6 +42,22 @@ export class ValidationService {
     return this._status;
   }
 
+  set getFrom(status: any) {
+    this._from = status;
+  }
+
+  get getFrom(): any {
+    return this._from;
+  }
+
+  set getTo(status: any) {
+    this._to = status;
+  }
+
+  get getTo(): any {
+    return this._to;
+  }
+
   constructor(private http: HttpClient) {
     this.link = "http://128.199.228.223:3000"
     // this.link = "http://192.168.43.202:3000"
@@ -54,10 +72,11 @@ export class ValidationService {
       password: info.password
     }
     return new Promise(resolve => {
-      this.http.post<myData>(this.link2 + '/api/login', data, { headers: this.headers }).subscribe(data => {
+      this.http.post<myData>(this.link + '/api/login', data, { headers: this.headers }).subscribe(data => {
         // this.result = data;
         // this.token = this.result.token;
         this.accountData = data;
+        localStorage.setItem('userid', this.accountData.id);
         this.setToken(this.accountData.token);
         resolve(data);
       }, err => {
@@ -228,13 +247,13 @@ export class ValidationService {
 
     });
     let data = {
-      id: "",
+      id: 0,
       transid: trans.transid,
       userid: trans.userid,
       name: trans.name,
       retailer: trans.receipt_from ? trans.receipt_from : "",
-      fieldforce: trans.fieldforce_id ? trans.fieldforce_id : "",
-      distributor: trans.distributor ? trans.distributor : "",
+      fieldforce: trans.fieldforce_id ? trans.fieldforce_id : 0,
+      distributor: trans.distributor ? trans.distributor : 0,
       membershipid: trans.membershipid,
       invoice: trans.invoice,
       products: JSON.stringify(trans.products),
@@ -251,7 +270,7 @@ export class ValidationService {
     console.log(data);
 
     return new Promise(resolve => {
-      this.http.post(this.link2 + '/api/addTransDetails', data).subscribe(
+      this.http.post(this.link + '/api/addTransDetails', data).subscribe(
         data => {
           resolve(data);
           console.log('res', data);
@@ -272,7 +291,7 @@ export class ValidationService {
       transid: info.transid,
     }
     return new Promise(resolve => {
-      this.http.get<myData>(this.link2 + '/api/checkTrans/' + data.type + '/' + data.transid).subscribe(
+      this.http.get<myData>(this.link + '/api/checkTrans/' + data.type + '/' + data.transid).subscribe(
         data => {
           resolve(data);
           console.log('result', data);
@@ -288,16 +307,16 @@ export class ValidationService {
     console.log(trans);
 
     let data = {
-      id: "",
+      id: 0,
       transid: trans.transid,
-      userid: this.accountData.id,
+      userid:  localStorage.getItem('userid'),
       type: trans.type,
       remarks: trans.remarks ? trans.remarks : "",
     }
     console.log(data);
 
     return new Promise(resolve => {
-      this.http.post(this.link2 + '/api/addSelected', data).subscribe(
+      this.http.post(this.link + '/api/addSelected', data).subscribe(
         data => {
           resolve(data);
           console.log('res', data);
@@ -313,7 +332,7 @@ export class ValidationService {
   addTrans(trans) {
     console.log(trans);
     let data = {
-      id: "",
+      id: 0,
       transNo: trans.transid,
       grossTotal: trans.grossSales,
       remarks: ""
@@ -343,7 +362,7 @@ export class ValidationService {
   addItem(item) {
     console.log(item);
     let data = {
-      id: "",
+      id: 0,
       itemNo: item.prodid,
       transNo: item.transNo,
       name: "",
@@ -375,7 +394,7 @@ export class ValidationService {
     // console.log(info);
     // console.log(data);
     return new Promise(resolve => {
-      this.http.get(this.link2 + '/api/getTransDetails/' + info.type + '/' + info.status, data).subscribe(
+      this.http.get(this.link + '/api/getTransDetails/' + info.type + '/' + info.status, data).subscribe(
         data => {
           resolve(data);
           // console.log('res', data);

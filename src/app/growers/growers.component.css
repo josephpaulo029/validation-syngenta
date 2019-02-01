@@ -263,3 +263,16 @@ tbody td {
     background-color: transparent;
     transition: 0.3s background-color 0s;
 }
+
+.datefromStye {
+    position: absolute;
+    right: 20px;
+}
+
+.datefromStye mat-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 40px;
+    margin-right: 15px;
+    cursor: pointer;
+}

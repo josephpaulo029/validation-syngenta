@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.dashboardStatus = true;
     console.log(localStorage.getItem('TOKEN') != null);
+    console.log(localStorage.getItem('userid'));
   }
 
   gotoPage(page, status) {

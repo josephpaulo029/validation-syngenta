@@ -3,7 +3,7 @@ import { ValidationService } from './../../services/validation.service';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-growers-denied-table',
   templateUrl: './growers-denied-table.component.html',
@@ -19,6 +19,9 @@ export class GrowersDeniedTableComponent implements OnInit {
   @Input() status: any;
   @Output() viewData = new EventEmitter<any>();
   @Input() dashboard: boolean;
+  fromDate: any;
+  toDate: any;
+  pipe = new DatePipe('en-US'); // Use your own locale
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
 
@@ -49,6 +52,20 @@ export class GrowersDeniedTableComponent implements OnInit {
     });
   }
 
+  filterbyDate(data) {
+    this.fromDate = this.validationService.getFrom;
+    this.toDate = this.validationService.getTo;
+    console.log(this.fromDate);
+    console.log(this.toDate);
+
+    this.growersData = data.filter((item: any) => {
+      let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
+      console.log(transDate);
+      return transDate >= this.fromDate &&
+        transDate <= this.toDate;
+    });
+  }
+
   loadDenied() {
     let data = {
       status: 4,
@@ -57,6 +74,7 @@ export class GrowersDeniedTableComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.growersData = data;
+        this.filterbyDate(this.growersData);
         this.rerender();
 
         // this.deniedlength.emit(data);
