@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ValidationService } from 'src/app/services/validation.service';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -21,11 +22,26 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[];
+  accountInfo: any;
+  timelog: any;
 
-  constructor() { }
+  constructor(private validationService: ValidationService) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.accountInfo = JSON.parse(localStorage.getItem('accountinfo'));
+    // this.timelog = this.validationService.accountData.datetime;
+    console.log(this.accountInfo);
+
+    // Promise.resolve(this.validationService.getaccountInfo())
+    //   .then(data => {
+    //     this.accountInfo = data;
+
+    //     console.log(data);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   }
   isMobileMenu() {
     if ($(window).width() > 991) {
@@ -37,5 +53,5 @@ export class SidebarComponent implements OnInit {
   ngOnDestroy() {
     localStorage.removeItem('TOKEN');
   }
-  
+
 }

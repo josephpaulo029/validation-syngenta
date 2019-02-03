@@ -72,17 +72,45 @@ export class ValidationService {
       password: info.password
     }
     return new Promise(resolve => {
-      this.http.post<myData>(this.link + '/api/login', data, { headers: this.headers }).subscribe(data => {
+      this.http.post<myData>(this.link2 + '/api/login', data, { headers: this.headers }).subscribe(data => {
         // this.result = data;
         // this.token = this.result.token;
+        console.log(data);
+
         this.accountData = data;
+        let dt = new Date();
+        this.accountData.datetime = dt;
+        localStorage.setItem('accountinfo', JSON.stringify(this.accountData));
         localStorage.setItem('userid', this.accountData.id);
+        // let dt = Date.now();
+
         this.setToken(this.accountData.token);
+        this.insertUserLog(this.accountData)
         resolve(data);
       }, err => {
         console.log(err);
       });
     });
+  }
+
+  insertUserLog(info) {
+    let data;
+    data = {
+      id: 0,
+      userid: info.id,
+      datetime: info.datetime,
+      remarks: ''
+    }
+    return new Promise(resolve => {
+      this.http.post<myData>(this.link2 + '/api/addLogs', data).subscribe(data => {
+        console.log(data);
+
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    });
+
   }
 
   setToken(token: string): void {
@@ -104,6 +132,21 @@ export class ValidationService {
         data => {
           resolve(data);
           // console.log('growersData', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  getGrowerInfo(info) {
+    console.log(info.userid);
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link + '/get/growers/' + info.userid).subscribe(
+        data => {
+          resolve(data);
+          console.log('getGrowerInfo', data);
         },
         err => {
           console.log(err);
@@ -251,7 +294,7 @@ export class ValidationService {
       transid: trans.transid,
       userid: trans.userid,
       name: trans.name,
-      retailer: trans.receipt_from ? trans.receipt_from : "",
+      retailer: trans.type == 'grower' ? trans.receipt_from : trans.retailer_id,
       fieldforce: trans.fieldforce_id ? trans.fieldforce_id : 0,
       distributor: trans.distributor ? trans.distributor : 0,
       membershipid: trans.membershipid,
@@ -309,7 +352,7 @@ export class ValidationService {
     let data = {
       id: 0,
       transid: trans.transid,
-      userid:  localStorage.getItem('userid'),
+      userid: localStorage.getItem('userid'),
       type: trans.type,
       remarks: trans.remarks ? trans.remarks : "",
     }
@@ -404,5 +447,78 @@ export class ValidationService {
         }
       );
     });
+  }
+
+  getaccountInfo() {
+    let setHeaders = new HttpHeaders(
+      { 'Content-Type': 'application/json', 'x-access-token': localStorage.getItem('TOKEN') },
+    );
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link + '/api/getAccount/' + localStorage.getItem('userid'), { headers: setHeaders }).subscribe(data => {
+        console.log(data);
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    });
+  }
+
+  approvesendSMS(info) {
+    console.log(info);
+    let data;
+    if (info.type == "grower") {
+      let msg = "Dear " + info.name + ",\n\nItong mensahe ay para kumpirmahin na natanggap at\n na-aprubahan ang iyong pagsusumite.\n\nKatumbas na Puntos:" + info.total_points
+        + "\n\nTransaction ID: " + info.transid + "\n\nSalamat sa pagtitiwala sa aming mga produkto.\n\nLubos kaming umaasa sa mga susunod pa nating transaksyon.\n\nSalamat sa Tiwala!\n\nSyngenta PH";
+      data = {
+        mobile: info.phone_number,
+        message: msg,
+      }
+      console.log(data);
+
+    }
+
+    return new Promise(resolve => {
+      this.http.post(this.link + '/sms', data).subscribe(
+        data => {
+          resolve(data);
+          console.log('res', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+
+  }
+
+  denysendSMS(info) {
+    console.log(info);
+    let data;
+    if (info.type == "grower") {
+      data = {
+        mobile: info.phone_number,
+        message: info.remarks,
+      }
+      console.log(data);
+    } else {
+      data = {
+        mobile: info.phone_number,
+        message: info.remarks,
+      }
+      console.log(data);
+    }
+
+    return new Promise(resolve => {
+      this.http.post(this.link + '/sms', data).subscribe(
+        data => {
+          resolve(data);
+          console.log('res', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+
   }
 }

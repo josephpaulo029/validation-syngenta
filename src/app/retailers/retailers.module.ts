@@ -7,6 +7,7 @@ import { RetailersComponent } from './retailers.component';
 import { RetailersPendingTableComponent } from './retailers-pending-table/retailers-pending-table.component';
 import { RetailersApprovedTableComponent } from './retailers-approved-table/retailers-approved-table.component';
 import { RetailersDeniedTableComponent } from './retailers-denied-table/retailers-denied-table.component';
+import { CsvModule } from '@ctrl/ngx-csv';
 import {
   MatButtonModule,
   MatInputModule,
@@ -26,6 +27,7 @@ import {
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    CsvModule,
   ],
   declarations: [
     RetailersTableComponent,

@@ -56,12 +56,12 @@ export class GrowersPendingTableComponent implements OnInit {
   filterbyDate(data) {
     this.fromDate = this.validationService.getFrom;
     this.toDate = this.validationService.getTo;
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.growersData = data.filter((item: any) => {
       let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
-      console.log(transDate);
+      // console.log(transDate);
       return transDate >= this.fromDate &&
         transDate <= this.toDate;
     });
@@ -76,7 +76,7 @@ export class GrowersPendingTableComponent implements OnInit {
         this.rerender();
         // this.pendingLength.emit(data);
         // this.pendingGrowersData = this.sampleData;
-        console.log(this.growersData);
+        // console.log(this.growersData);
 
         // this.dtTrigger.next();
         // console.log(data);
@@ -93,7 +93,7 @@ export class GrowersPendingTableComponent implements OnInit {
     info.type = "grower";
     Promise.resolve(this.validationService.checkAvailability(info))
       .then(data => {
-        console.log(data);
+        // console.log(data);
         // console.log(this.validationService.accountData.id);
         let res;
         res = data;
@@ -102,7 +102,7 @@ export class GrowersPendingTableComponent implements OnInit {
           let retailerid;
           retailerid = info.receipt_from.split("-")[1];
           Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
-            console.log(retailerInfo);
+            // console.log(retailerInfo);
 
             let retailer;
             retailer = retailerInfo;
@@ -114,7 +114,7 @@ export class GrowersPendingTableComponent implements OnInit {
               fieldforce = fforceInfo;
               info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.last_name;
               info.fieldforce_id = fieldforce.id;
-              console.log(fieldforce);
+              // console.log(fieldforce);
 
               Promise.resolve(this.validationService.getGrowerProduct(info.transid)).then(data => {
                 info.products = data;

@@ -55,12 +55,12 @@ export class GrowersApprovedTableComponent implements OnInit {
   filterbyDate(data) {
     this.fromDate = this.validationService.getFrom;
     this.toDate = this.validationService.getTo;
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.growersData = data.filter((item: any) => {
       let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
-      console.log(transDate);
+      // console.log(transDate);
       return transDate >= this.fromDate &&
         transDate <= this.toDate;
     });
@@ -78,7 +78,7 @@ export class GrowersApprovedTableComponent implements OnInit {
         this.rerender();
 
         // this.approveLength.emit(data);
-        console.log(this.growersData);
+        // console.log(this.growersData);
         // this.dtTrigger.next();
         // console.log(data);
 
@@ -93,7 +93,7 @@ export class GrowersApprovedTableComponent implements OnInit {
     let retailerid;
     retailerid = info.retailer.split("-")[1];
     Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
-      console.log(retailerInfo);
+      // console.log(retailerInfo);
 
       let retailer;
       retailer = retailerInfo;
@@ -105,7 +105,7 @@ export class GrowersApprovedTableComponent implements OnInit {
         fieldforce = fforceInfo;
         info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
         info.fieldforce_id = fieldforce.id;
-        console.log(fieldforce);
+        // console.log(fieldforce);
 
         info.products = JSON.parse(info.products);
         info.total_points = 0;

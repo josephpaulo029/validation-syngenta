@@ -56,12 +56,12 @@ export class RetailersPendingTableComponent implements OnInit {
   filterbyDate(data) {
     this.fromDate = this.validationService.getFrom;
     this.toDate = this.validationService.getTo;
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.retailersData = data.filter((item: any) => {
       let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
-      console.log(transDate);
+      // console.log(transDate);
       return transDate >= this.fromDate &&
         transDate <= this.toDate;
     });
@@ -76,7 +76,7 @@ export class RetailersPendingTableComponent implements OnInit {
         this.rerender();
         // this.pendingLength.emit(data);
         // this.pendingGrowersData = this.sampleData;
-        console.log(this.retailersData);
+        // console.log(this.retailersData);
 
         // this.dtTrigger.next();
         // console.log(data);
@@ -93,26 +93,26 @@ export class RetailersPendingTableComponent implements OnInit {
     info.type = "retailer";
     Promise.resolve(this.validationService.checkAvailability(info))
       .then(data => {
-        console.log(data);
+        // console.log(data);
         let res;
         res = data;
         if (res.length == 0 || res.length != 0 && res[0].userid == localStorage.getItem('userid')) {
           let retailerid;
           retailerid = info.userid;
           Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
-            console.log(retailerInfo);
+            // console.log(retailerInfo);
 
             let retailer;
             retailer = retailerInfo;
             info.retailer_name = retailer.first_name + ' ' + retailer.middle_name + ' ' + retailer.last_name;
             info.retailer_id = retailer.id;
-
+            info.phone_number = retailer.phone_number;
             Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
               let fieldforce;
               fieldforce = fforceInfo;
               info.fieldforce_name = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
               info.fieldforce_id = fieldforce.id;
-              console.log(fieldforce);
+              // console.log(fieldforce);
 
               Promise.resolve(this.validationService.getRetailerProduct(info.transid)).then(data => {
                 info.products = data;
@@ -126,12 +126,12 @@ export class RetailersPendingTableComponent implements OnInit {
                   this.validationService.getSelectedData = info;
                   this.router.navigate(['/retailers']);
                 }
-                console.log(data);
+                // console.log(data);
                 // this.dtTrigger.next();
                 if (res.length == 0) {
                   Promise.resolve(this.validationService.addSelected(info))
                     .then(data => {
-                      console.log(data);
+                      // console.log(data);
 
                     }).catch(e => {
                       console.log(e);

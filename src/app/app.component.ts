@@ -31,6 +31,7 @@ export class AppComponent {
   beforeunloadHandler(event) {
     localStorage.removeItem('TOKEN');
     localStorage.removeItem('userid');
+    localStorage.removeItem('accountinfo');
   }
 
   // ngOnDestroy() {

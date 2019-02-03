@@ -73,6 +73,7 @@ export class RetailersComponent implements OnInit {
   }];
   dateFrom: any;
   dateTo: any;
+  status1: any;
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) {
 
@@ -87,27 +88,27 @@ export class RetailersComponent implements OnInit {
     this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
     this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
 
-    console.log(this.validationService.getTabStatus);
+    // console.log(this.validationService.getTabStatus);
     switch (this.validationService.getTabStatus) {
       case 2:
         this.clickPending();
         document.getElementById('pendingBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       case 3:
         this.clickApproved();
         document.getElementById('approvedBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       case 4:
         this.clickDenied();
         document.getElementById('deniedBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
 
       default:
         this.clickPending();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
 
         break;
     }
@@ -119,11 +120,11 @@ export class RetailersComponent implements OnInit {
       if (this.viewData != undefined) {
         this.dashboardSelect = this.viewData.onselect || false;
         this.attachedImg = this.viewData.receipt_photo;
-        console.log(this.dashboardSelect);
+        // console.log(this.dashboardSelect);
         this.defaultnavStatus();
         this.viewDataActive = true;
         if (this.dashboard) {
-          console.log(this.dashboard);
+          // console.log(this.dashboard);
 
           this.defaultnavStatus();
           this.pendingActive = true;
@@ -131,7 +132,7 @@ export class RetailersComponent implements OnInit {
         }
       }
       if (this.dashboard) {
-        console.log(this.dashboard);
+        // console.log(this.dashboard);
         this.validationService.getTabStatus = undefined;
         this.clickPending();
       }
@@ -165,21 +166,21 @@ export class RetailersComponent implements OnInit {
         this.dateFrom = event.value;
         this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
         this.reloadTbl();
-        console.log(this.validationService.getFrom);
+        // console.log(this.validationService.getFrom);
         break;
 
       case 'to':
         this.dateTo = event.value;
         this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
         this.reloadTbl();
-        console.log(this.validationService.getTo);
+        // console.log(this.validationService.getTo);
         break;
 
       default:
         break;
     }
     // console.log(this.dateVal);
-    console.log(event);
+    // console.log(event);
   }
 
   reloadTbl() {
@@ -232,10 +233,26 @@ export class RetailersComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.approveRetailersData = data;
-        this.approveLength.emit(this.approveRetailersData);
-        // console.log(this.approveGrowersData);
-        // console.log(data);
 
+        let data2 = {
+          status: 1,
+          type: "retailer"
+        }
+        Promise.resolve(this.validationService.gettransData(data2))
+          .then(data => {
+            this.status1 = data;
+            this.status1.forEach(element => {
+              this.approveRetailersData.push(element);
+            });
+            console.log(this.approveRetailersData);
+            this.approveLength.emit(this.approveRetailersData);
+            // console.log(this.approveGrowersData);
+            // console.log(data);
+
+          })
+          .catch(e => {
+            console.log(e);
+          });
       })
       .catch(e => {
         console.log(e);
@@ -276,22 +293,23 @@ export class RetailersComponent implements OnInit {
   }
 
   addAmt(prod, form: NgForm) {
-    console.log(prod)
-    console.log(form.value)
+    // console.log(prod)
+    // console.log(form.value)
     this.viewData.products.filter(product => {
       if (product.id == prod.id) {
         product.amount = form.value.amount;
       };
     });
     this.computeGross();
-    console.log(this.viewData.products)
+    // console.log(this.viewData.products)
   }
 
   computeGross() {
     this.totalGross = 0;
     this.viewData.products.filter(product => {
       if (product.amount) {
-        this.totalGross = parseInt(this.totalGross) + (parseInt(product.amount) * parseInt(product.quantity));
+        this.totalGross = parseInt(this.totalGross) + parseInt(product.amount);
+        // this.totalGross = parseInt(this.totalGross) + (parseInt(product.amount) * parseInt(product.quantity));
       };
     })
   }
@@ -301,7 +319,7 @@ export class RetailersComponent implements OnInit {
     Promise.resolve(this.validationService.retailersValidate(this.viewData))
       .then(data => {
         // this.dtTrigger.next();
-        console.log(data);
+        // console.log(data);
       })
       .catch(e => {
         console.log(e);
@@ -316,7 +334,7 @@ export class RetailersComponent implements OnInit {
   }
 
   approveTrans(status) {
-    console.log(status);
+    // console.log(status);
     if (status) {
       this.validateData();
       this.viewData.status = 3;
@@ -328,7 +346,7 @@ export class RetailersComponent implements OnInit {
             // this.dtTrigger.unsubscribe();
             Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
               // console.log(data);
-              this.goBack();
+              // this.goBack();
               this.totalGross = 0;
               this.dateVal = undefined;
               this.selectedDistributor = 0;
@@ -362,16 +380,21 @@ export class RetailersComponent implements OnInit {
           .then(data => {
             // console.log(data);
             // console.log(this.viewData);
-            Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-              // console.log(data);
-              // this.router.navigate(['/dashboard']);
-              this.goBack();
-              this.totalGross = 0;
-              this.dateVal = undefined;
-              this.selectedDistributor = 0;
-            }).catch(e => {
-              console.log(e);
-            });
+            Promise.resolve(this.validationService.denysendSMS(this.viewData))
+              .then(data => {
+                Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+                  // console.log(data);
+                  // this.router.navigate(['/dashboard']);
+                  // this.goBack();
+                  this.totalGross = 0;
+                  this.dateVal = undefined;
+                  this.selectedDistributor = 0;
+                }).catch(e => {
+                  console.log(e);
+                });
+              }).catch(e => {
+                console.log(e);
+              });
           })
           .catch(e => {
             console.log(e);
@@ -403,21 +426,21 @@ export class RetailersComponent implements OnInit {
 
   goBack() {
     this.viewDataActive = false;
-    console.log(this.viewData.status);
+    // console.log(this.viewData.status);
     switch (this.viewData.status) {
       case 2: {
         this.clickPending();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
       case 3: {
         this.clickApproved();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
       case 4: {
         this.clickDenied();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
 

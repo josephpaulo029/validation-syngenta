@@ -22,6 +22,7 @@ export class RetailersApprovedTableComponent implements OnInit {
   fromDate: any;
   toDate: any;
   pipe = new DatePipe('en-US'); // Use your own locale
+  status1: any;
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
 
@@ -55,12 +56,12 @@ export class RetailersApprovedTableComponent implements OnInit {
   filterbyDate(data) {
     this.fromDate = this.validationService.getFrom;
     this.toDate = this.validationService.getTo;
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.retailersData = data.filter((item: any) => {
       let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
-      console.log(transDate);
+      // console.log(transDate);
       return transDate >= this.fromDate &&
         transDate <= this.toDate;
     });
@@ -74,14 +75,25 @@ export class RetailersApprovedTableComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.retailersData = data;
-        this.filterbyDate(this.retailersData);
-        this.rerender();
 
-        // this.approveLength.emit(data);
-        console.log(this.retailersData);
-        // this.dtTrigger.next();
+        let data2 = {
+          status: 1,
+          type: "retailer"
+        }
+        Promise.resolve(this.validationService.gettransData(data2))
+          .then(data => {
+            this.status1 = data;
+            this.status1.forEach(element => {
+              this.retailersData.push(element);
+            });
+            this.filterbyDate(this.retailersData);
+            this.rerender();
+            console.log(this.retailersData);
+          })
+          .catch(e => {
+            console.log(e);
+          });
         // console.log(data);
-
       })
       .catch(e => {
         console.log(e);
@@ -93,7 +105,7 @@ export class RetailersApprovedTableComponent implements OnInit {
     let retailerid;
     retailerid = info.userid;
     Promise.resolve(this.validationService.getRetailerInfo(retailerid)).then(retailerInfo => {
-      console.log(retailerInfo);
+      // console.log(retailerInfo);
 
       let retailer;
       retailer = retailerInfo;
@@ -105,7 +117,7 @@ export class RetailersApprovedTableComponent implements OnInit {
         fieldforce = fforceInfo;
         info.fieldforce = fieldforce.first_name + ' ' + fieldforce.middle_name + ' ' + fieldforce.last_name;
         info.fieldforce_id = fieldforce.id;
-        console.log(fieldforce);
+        // console.log(fieldforce);
 
         info.products = JSON.parse(info.products);
         info.total_points = 0;

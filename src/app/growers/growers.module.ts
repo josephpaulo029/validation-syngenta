@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { GrowersPendingTableComponent } from './growers-pending-table/growers-pending-table.component';
 import { GrowersApprovedTableComponent } from './growers-approved-table/growers-approved-table.component';
 import { GrowersDeniedTableComponent } from './growers-denied-table/growers-denied-table.component';
+import { CsvModule } from '@ctrl/ngx-csv';
 import {
   MatButtonModule,
   MatInputModule,
@@ -26,6 +27,7 @@ import {
     MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    CsvModule,
   ],
   declarations: [
     GrowersTableComponent,

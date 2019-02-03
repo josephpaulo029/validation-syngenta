@@ -82,27 +82,27 @@ export class GrowersComponent implements OnInit {
     this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
     this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
 
-    console.log(this.validationService.getTabStatus);
+    // console.log(this.validationService.getTabStatus);
     switch (this.validationService.getTabStatus) {
       case 2:
         this.clickPending();
         document.getElementById('pendingBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       case 1:
         this.clickApproved();
         document.getElementById('approvedBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       case 4:
         this.clickDenied();
         document.getElementById('deniedBtn').click();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
 
       default:
         this.clickPending();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
 
         break;
     }
@@ -126,7 +126,7 @@ export class GrowersComponent implements OnInit {
         }
       }
       if (this.dashboard) {
-        console.log(this.dashboard);
+        // console.log(this.dashboard);
         this.validationService.getTabStatus = undefined;
         this.clickPending();
       }
@@ -161,14 +161,14 @@ export class GrowersComponent implements OnInit {
         this.dateFrom = event.value;
         this.validationService.getFrom = this.pipe.transform(this.dateFrom, 'shortDate');
         this.reloadTbl();
-        console.log(this.validationService.getFrom);
+        // console.log(this.validationService.getFrom);
         break;
 
       case 'to':
         this.dateTo = event.value;
         this.validationService.getTo = this.pipe.transform(this.dateTo, 'shortDate');
         this.reloadTbl();
-        console.log(this.validationService.getTo);
+        // console.log(this.validationService.getTo);
         break;
 
       default:
@@ -176,7 +176,7 @@ export class GrowersComponent implements OnInit {
     }
 
     // console.log(this.dateVal);
-    console.log(event);
+    // console.log(event);
   }
 
   reloadTbl() {
@@ -201,7 +201,7 @@ export class GrowersComponent implements OnInit {
   }
 
   getViewData(info) {
-    console.log(info);
+    // console.log(info);
   }
   loadPending() {
     Promise.resolve(this.validationService.getGrowersTrans(2))
@@ -277,21 +277,21 @@ export class GrowersComponent implements OnInit {
 
   goBack() {
     this.viewDataActive = false;
-    console.log(this.viewData.status);
+    // console.log(this.viewData.status);
     switch (this.viewData.status) {
       case 2: {
         this.clickPending();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
       case 1: {
         this.clickApproved();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
       case 4: {
         this.clickDenied();
-        console.log(this.activeHref);
+        // console.log(this.activeHref);
         break;
       }
 
@@ -319,35 +319,25 @@ export class GrowersComponent implements OnInit {
   }
 
   addAmt(prod, form: NgForm) {
-    console.log(prod)
-    console.log(form.value)
+    // console.log(prod)
+    // console.log(form.value)
     this.viewData.products.filter(product => {
       if (product.id == prod.id) {
         product.amount = form.value.amount;
       };
     });
     this.computeGross();
-    console.log(this.viewData.products)
+    // console.log(this.viewData.products)
   }
 
   computeGross() {
     this.totalGross = 0;
     this.viewData.products.filter(product => {
       if (product.amount) {
-        this.totalGross = parseInt(this.totalGross) + (parseInt(product.amount) * parseInt(product.quantity));
+        this.totalGross = parseInt(this.totalGross) + parseInt(product.amount);
+        // this.totalGross = parseInt(this.totalGross) + (parseInt(product.amount) * parseInt(product.quantity));
       };
     })
-  }
-
-  approve() {
-    Promise.resolve(this.validationService.growersValidate(1))
-      .then(data => {
-        // this.dtTrigger.next();
-        console.log(data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
   }
 
   validateData() {
@@ -361,24 +351,43 @@ export class GrowersComponent implements OnInit {
     // let element: HTMLElement = document.getElementById('approveBtn') as HTMLElement;
     // element.click();
     // console.log(status);
+    console.log(this.viewData);
+
     if (status) {
       this.validateData();
       this.viewData.status = 1;
       if (this.validateData()) {
-        // console.log(this.viewData);
-        Promise.resolve(this.validationService.growersValidate(this.viewData))
+
+        Promise.resolve(this.validationService.getGrowerInfo(this.viewData))
           .then(data => {
-            // console.log(data);
-            // this.dtTrigger.unsubscribe();
-            Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-              // console.log(data);
-              // this.loadPending();
-              this.goBack();
-              this.totalGross = 0;
-              this.dateVal = undefined;
-            }).catch(e => {
-              console.log(e);
-            });
+            let growerInfo;
+            growerInfo = data;
+            this.viewData.phone_number = growerInfo.phone_number;
+            // console.log(this.viewData);
+            Promise.resolve(this.validationService.growersValidate(this.viewData))
+              .then(data => {
+                // console.log(data);
+                // this.dtTrigger.unsubscribe();
+                Promise.resolve(this.validationService.approvesendSMS(this.viewData))
+                  .then(data => {
+
+                    Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+                      // console.log(data);
+                      // this.loadPending();
+                      // this.goBack();
+                      this.totalGross = 0;
+                      this.dateVal = undefined;
+                    }).catch(e => {
+                      console.log(e);
+                    });
+                  }).catch(e => {
+                    console.log(e);
+                  });
+
+              })
+              .catch(e => {
+                console.log(e);
+              });
           })
           .catch(e => {
             console.log(e);
@@ -402,18 +411,31 @@ export class GrowersComponent implements OnInit {
         this.viewData.status = 4;
         this.viewData.total_points = 0;
         this.viewData.remarks = form.value.reason;
-        Promise.resolve(this.validationService.growersValidate(this.viewData))
+        Promise.resolve(this.validationService.getGrowerInfo(this.viewData))
           .then(data => {
-            // console.log(data);
-            // console.log(this.viewData);
-            Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-              // console.log(data);
-              this.goBack();
-              this.totalGross = 0;
-              this.dateVal = undefined;
-            }).catch(e => {
-              console.log(e);
-            });
+            let growerInfo;
+            growerInfo = data;
+            this.viewData.phone_number = growerInfo.phone_number;
+            Promise.resolve(this.validationService.growersValidate(this.viewData))
+              .then(data => {
+                // console.log(data);
+                // console.log(this.viewData);
+                Promise.resolve(this.validationService.denysendSMS(this.viewData))
+                  .then(data => {
+                    Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+                      // console.log(data);
+                      // this.goBack();
+                      this.totalGross = 0;
+                      this.dateVal = undefined;
+                    }).catch(e => {
+                      console.log(e);
+                    });
+                  }).catch(e => {
+                    console.log(e);
+                  });
+              }).catch(e => {
+                console.log(e);
+              });
           })
           .catch(e => {
             console.log(e);
