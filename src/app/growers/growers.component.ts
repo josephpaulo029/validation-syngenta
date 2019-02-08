@@ -69,7 +69,7 @@ export class GrowersComponent implements OnInit {
   dateFrom: any;
   dateTo: any;
   errMsg: any;
-
+  amtVal: any;
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) {
   }
 
@@ -151,6 +151,17 @@ export class GrowersComponent implements OnInit {
     // this.routerParams.unsubscribe();
   }
 
+  downloadImage(img) {
+    this.validationService.getImage(img).subscribe(
+      (res) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(res);
+        a.download = "receipt_" + this.viewData.invoice;
+        document.body.appendChild(a);
+        a.click();
+      });
+  }
+  
   getDate(type: string, event: MatDatepickerInputEvent<Date>) {
     switch (type) {
       case 'change':
@@ -399,7 +410,10 @@ export class GrowersComponent implements OnInit {
   }
 
   gotoDashbard() {
-    this.router.navigate(['/dashboard']);
+    this.defaultnavStatus();
+    this.pendingActive = true;
+    // this.reloadTbl();
+    // this.router.navigate(['/growers']);
   }
 
   denyTrans(form: NgForm, status) {

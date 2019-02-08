@@ -156,6 +156,17 @@ export class RetailersComponent implements OnInit {
     // this.routerParams.unsubscribe();
   }
 
+  downloadImage(img) {
+    this.validationService.getImage(img).subscribe(
+      (res) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(res);
+        a.download = "receipt_" + this.viewData.invoice;
+        document.body.appendChild(a);
+        a.click();
+      });
+  }
+
   getDate(type: string, event: MatDatepickerInputEvent<Date>) {
     switch (type) {
       case 'change':
@@ -233,26 +244,10 @@ export class RetailersComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.approveRetailersData = data;
+        this.approveLength.emit(this.approveRetailersData);
+        console.log(this.approveRetailersData);
+        // console.log(data);
 
-        let data2 = {
-          status: 1,
-          type: "retailer"
-        }
-        Promise.resolve(this.validationService.gettransData(data2))
-          .then(data => {
-            this.status1 = data;
-            this.status1.forEach(element => {
-              this.approveRetailersData.push(element);
-            });
-            console.log(this.approveRetailersData);
-            this.approveLength.emit(this.approveRetailersData);
-            // console.log(this.approveGrowersData);
-            // console.log(data);
-
-          })
-          .catch(e => {
-            console.log(e);
-          });
       })
       .catch(e => {
         console.log(e);
@@ -364,7 +359,9 @@ export class RetailersComponent implements OnInit {
   }
 
   gotoDashbard() {
-    this.router.navigate(['/dashboard']);
+    this.defaultnavStatus();
+    this.pendingActive = true;
+    // this.router.navigate(['/dashboard']);
   }
 
   denyTrans(form: NgForm, status) {

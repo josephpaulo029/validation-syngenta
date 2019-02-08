@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 
 import { jsonpCallbackContext } from '@angular/common/http/src/module';
-
+import 'rxjs/Rx';
 interface myData {
   growersList: object;
 }
@@ -64,6 +64,13 @@ export class ValidationService {
     this.link2 = "http://localhost:3000"
   }
 
+  getImage(imageUrl: string) {
+    return this.http.get(imageUrl, { observe: 'response', responseType: 'blob' })
+      .map((res) => {
+        return new Blob([res.body], { type: res.headers.get('Content-Type') });
+      })
+  }
+
   loginAuth(info) {
     console.log(info);
     let data;
@@ -72,7 +79,7 @@ export class ValidationService {
       password: info.password
     }
     return new Promise(resolve => {
-      this.http.post<myData>(this.link2 + '/api/login', data, { headers: this.headers }).subscribe(data => {
+      this.http.post<myData>(this.link + '/api/login', data, { headers: this.headers }).subscribe(data => {
         // this.result = data;
         // this.token = this.result.token;
         console.log(data);
@@ -102,7 +109,7 @@ export class ValidationService {
       remarks: ''
     }
     return new Promise(resolve => {
-      this.http.post<myData>(this.link2 + '/api/addLogs', data).subscribe(data => {
+      this.http.post<myData>(this.link + '/api/addLogs', data).subscribe(data => {
         console.log(data);
 
         resolve(data);

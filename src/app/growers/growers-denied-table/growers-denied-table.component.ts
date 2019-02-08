@@ -99,6 +99,7 @@ export class GrowersDeniedTableComponent implements OnInit {
       retailer = retailerInfo;
       info.retailer_name = retailer.first_name + ' ' + retailer.middle_name + ' ' + retailer.last_name;
       info.retailer_id = retailer.id;
+      info.business_name = retailer.business_name;
 
       Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
         let fieldforce;

@@ -20,20 +20,27 @@
                 <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
                   [href]="activeHref" data-toggle="tab">Denied</a>
               </li>
-              <li class="datefromStye">
+              <li class="dateStyle">
                 <!-- <mat-label>From</mat-label> -->
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <!-- <i class="material-icons">date_range</i> -->
-                <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
-                <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <button type="button" *ngIf="!dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">--/--/----</button>
+                <button type="button" *ngIf="dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">{{dateFrom
+                  | date: "MMMM dd, yyyy" || '-'}}</button>
+                <!-- <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
+                  <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerFrom></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)" (dateChange)="getDate('from', $event)"
                   [matDatepicker]="pickerFrom">
 
-                <mat-label>-</mat-label>
-                <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
-                <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <mat-label>&nbsp;&nbsp;TO&nbsp;&nbsp;</mat-label>
+
+                <button type="button" *ngIf="!dateTo" class="btn btn-warning" (click)="pickerTo.open();">--/--/----</button>
+                <button type="button" *ngIf="dateTo" class="btn btn-warning" (click)="pickerTo.open();">{{dateTo |
+                  date: "MMMM dd, yyyy" || '-'}}</button>
+                <!-- <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
+                  <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerTo></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerTo" style="color: #fff;"></mat-datepicker-toggle> -->
                 <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)" (dateChange)="getDate('to', $event)"
@@ -59,7 +66,8 @@
                     <h4 class="card-title">RETAILER SUBMISSION FOR VALIDATION</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                      <a csvLink [data]="pendingRetailersData ? pendingRetailersData : ''" style="color: #fff;"><i class="material-icons" style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="pendingRetailersData ? pendingRetailersData : ''" style="color: #fff;"><i class="material-icons"
+                        style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
@@ -77,7 +85,8 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                      <a csvLink [data]="approveRetailersData ? approveRetailersData : ''" style="color: #fff;"><i class="material-icons" style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="approveRetailersData ? approveRetailersData : ''" style="color: #fff;"><i class="material-icons"
+                        style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
@@ -96,7 +105,8 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                      <a csvLink [data]="deniedRetailersData ? deniedRetailersData : ''" style="color: #fff;"><i class="material-icons" style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="deniedRetailersData ? deniedRetailersData : ''" style="color: #fff;"><i class="material-icons"
+                        style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
@@ -136,6 +146,12 @@
                   <h4>Retailer</h4>
                 </div>
                 <div class="col dataVal">{{ viewData.name || '-' }}</div>
+              </div>
+              <div class="row">
+                <div class="col col-4">
+                  <h4>Business Name</h4>
+                </div>
+                <div class="col dataVal">{{ viewData.business_name || '-' }}</div>
               </div>
               <div class="row">
                 <div class="col col-4">
@@ -238,7 +254,7 @@
                 <div class="col col-4">
                   <h4>Total Points Earned</h4>
                 </div>
-                <div class="col dataVal">{{ viewData.total_points || 0 }}</div>
+                <div class="col dataVal">{{ viewData.total_points || 0 | number }}</div>
               </div>
               <div class="row" *ngIf="viewData.status == 3 || viewData.status == 1 || viewData.status == 4">
                 <div class="col col-4">
@@ -309,7 +325,7 @@
                   {{0}}
                 </td>
                 <td *ngIf="viewData.status == 2 || viewData.status == 3 || viewData.status == 1">
-                  {{prod.points * prod.quantity || 0}}
+                  {{prod.points * prod.quantity || 0 | number}}
                 </td>
                 <td *ngIf="viewData.status == 4">
                   {{0}}
@@ -405,6 +421,9 @@
           <div class="form-group">
             <img src="{{attachedImg ? attachedImg : ''}}" style="width: 100%;height: 100%;" data-dismiss="modal" />
           </div>
+          <button class="btn btn-success btn-block" (click)="downloadImage(attachedImg)">
+            <i class="material-icons">cloud_download</i>&nbsp;&nbsp;Download
+          </button>
         </form>
       </div>
       <div class="modal-footer" *ngIf="false">

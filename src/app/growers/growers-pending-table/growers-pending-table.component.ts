@@ -74,11 +74,8 @@ export class GrowersPendingTableComponent implements OnInit {
         this.growersData = data;
         this.filterbyDate(this.growersData);
         this.rerender();
-        // this.pendingLength.emit(data);
-        // this.pendingGrowersData = this.sampleData;
+        // this.growersData = this.sampleData;
         // console.log(this.growersData);
-
-        // this.dtTrigger.next();
         // console.log(data);
 
       })
@@ -108,6 +105,7 @@ export class GrowersPendingTableComponent implements OnInit {
             retailer = retailerInfo;
             info.retailer_name = retailer.first_name + ' ' + retailer.last_name;
             info.retailer_id = retailer.id;
+            info.business_name = retailer.business_name;
 
             Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
               let fieldforce;

@@ -20,20 +20,27 @@
                 <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
                   [href]="activeHref" data-toggle="tab">Denied</a>
               </li>
-              <li class="datefromStye">
+              <li class="dateStyle">
                 <!-- <mat-label>From</mat-label> -->
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <!-- <i class="material-icons">date_range</i> -->
-                <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
-                <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <button type="button" *ngIf="!dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">--/--/----</button>
+                <button type="button" *ngIf="dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">{{dateFrom
+                  | date: "MMMM dd, yyyy" || '-'}}</button>
+                <!-- <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
+                <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerFrom></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)" (dateChange)="getDate('from', $event)"
                   [matDatepicker]="pickerFrom">
 
-                <mat-label>-</mat-label>
-                <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
-                <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label>
+                <mat-label>&nbsp;&nbsp;TO&nbsp;&nbsp;</mat-label>
+
+                <button type="button" *ngIf="!dateTo" class="btn btn-warning" (click)="pickerTo.open();">--/--/----</button>
+                <button type="button" *ngIf="dateTo" class="btn btn-warning" (click)="pickerTo.open();">{{dateTo |
+                  date: "MMMM dd, yyyy" || '-'}}</button>
+                <!-- <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
+                <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerTo></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerTo" style="color: #fff;"></mat-datepicker-toggle> -->
                 <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)" (dateChange)="getDate('to', $event)"
@@ -154,7 +161,7 @@
                 <div class="col col-4">
                   <h4>Retailer</h4>
                 </div>
-                <div class="col dataVal">{{ viewData.retailer_name || '-' }}</div>
+                <div class="col dataVal">{{ viewData.business_name || '-' }}</div>
               </div>
               <div class="row">
                 <div class="col col-4">
@@ -234,7 +241,7 @@
                 <div class="col col-4">
                   <h4>Total Points Earned</h4>
                 </div>
-                <div class="col dataVal">{{ viewData.total_points || 0 }}</div>
+                <div class="col dataVal">{{ viewData.total_points || 0 | number }}</div>
               </div>
               <div class="row" *ngIf="viewData.status == 1 || viewData.status == 4">
                 <div class="col col-4">
@@ -294,7 +301,8 @@
                         </span>
                       </div>
                       <input style="text-align: left; font-size: 1rem; font-weight: 600;" class="form-control" type="number"
-                        step="0.01" name="amount" (change)="addAmt(prod,amt)" placeholder="0" ngModel>
+                         name="amount" (change)="addAmt(prod,amt)"
+                        placeholder="0" ngModel>
                     </div>
                   </form>
                 </td>
@@ -305,7 +313,7 @@
                   {{0}}
                 </td>
                 <td *ngIf="viewData.status == 2 || viewData.status == 1">
-                  {{prod.points * prod.quantity || 0}}
+                  {{prod.points * prod.quantity || 0 | number}}
                 </td>
                 <td *ngIf="viewData.status == 4">
                   {{0}}
@@ -387,7 +395,7 @@
 
 <div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewAttachmentLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-lg" role="document" style="width: auto;">
     <div class="modal-content">
       <div class="modal-header" *ngIf="false">
         <h4 class="modal-title" id="viewAttachmentLabel"></h4>
@@ -395,11 +403,14 @@
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body" data-dismiss="modal">
+      <div class="modal-body">
         <form>
           <div class="form-group">
             <img src="{{attachedImg ? attachedImg : ''}}" style="width: 100%;height: 100%;" data-dismiss="modal" />
           </div>
+          <button class="btn btn-success btn-block" (click)="downloadImage(attachedImg)">
+            <i class="material-icons">cloud_download</i>&nbsp;&nbsp;Download
+          </button>
         </form>
       </div>
       <div class="modal-footer" *ngIf="false">

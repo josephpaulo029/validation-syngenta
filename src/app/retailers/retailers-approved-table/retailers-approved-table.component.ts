@@ -75,25 +75,10 @@ export class RetailersApprovedTableComponent implements OnInit {
     Promise.resolve(this.validationService.gettransData(data))
       .then(data => {
         this.retailersData = data;
+        this.filterbyDate(this.retailersData);
+        this.rerender();
+        console.log(this.retailersData);
 
-        let data2 = {
-          status: 1,
-          type: "retailer"
-        }
-        Promise.resolve(this.validationService.gettransData(data2))
-          .then(data => {
-            this.status1 = data;
-            this.status1.forEach(element => {
-              this.retailersData.push(element);
-            });
-            this.filterbyDate(this.retailersData);
-            this.rerender();
-            console.log(this.retailersData);
-          })
-          .catch(e => {
-            console.log(e);
-          });
-        // console.log(data);
       })
       .catch(e => {
         console.log(e);
@@ -111,7 +96,7 @@ export class RetailersApprovedTableComponent implements OnInit {
       retailer = retailerInfo;
       info.retailer_name = retailer.first_name + ' ' + retailer.middle_name + ' ' + retailer.last_name;
       info.retailer_id = retailer.id;
-
+      info.business_name = retailer.business_name;
       Promise.resolve(this.validationService.getFieldforceInfo(retailer.fieldforce_id)).then(fforceInfo => {
         let fieldforce;
         fieldforce = fforceInfo;
