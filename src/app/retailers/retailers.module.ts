@@ -8,6 +8,8 @@ import { RetailersPendingTableComponent } from './retailers-pending-table/retail
 import { RetailersApprovedTableComponent } from './retailers-approved-table/retailers-approved-table.component';
 import { RetailersDeniedTableComponent } from './retailers-denied-table/retailers-denied-table.component';
 import { CsvModule } from '@ctrl/ngx-csv';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 import {
   MatButtonModule,
   MatInputModule,
@@ -28,6 +30,7 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     CsvModule,
+    CurrencyMaskModule
   ],
   declarations: [
     RetailersTableComponent,

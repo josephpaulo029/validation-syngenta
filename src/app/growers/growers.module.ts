@@ -8,6 +8,8 @@ import { GrowersPendingTableComponent } from './growers-pending-table/growers-pe
 import { GrowersApprovedTableComponent } from './growers-approved-table/growers-approved-table.component';
 import { GrowersDeniedTableComponent } from './growers-denied-table/growers-denied-table.component';
 import { CsvModule } from '@ctrl/ngx-csv';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 import {
   MatButtonModule,
   MatInputModule,
@@ -28,6 +30,7 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     CsvModule,
+    CurrencyMaskModule
   ],
   declarations: [
     GrowersTableComponent,
