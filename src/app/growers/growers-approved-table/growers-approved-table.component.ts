@@ -21,6 +21,7 @@ export class GrowersApprovedTableComponent implements OnInit {
   @Input() dashboard: boolean;
   fromDate: any;
   toDate: any;
+  transDate: any;
   pipe = new DatePipe('en-US'); // Use your own locale
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) { }
@@ -53,17 +54,22 @@ export class GrowersApprovedTableComponent implements OnInit {
   }
 
   filterbyDate(data) {
-    this.fromDate = this.validationService.getFrom;
-    this.toDate = this.validationService.getTo;
-    // console.log(this.fromDate);
-    // console.log(this.toDate);
+    let fdate = new Date(this.validationService.getFrom);
+    let tdate = new Date(this.validationService.getTo);
+    this.fromDate = new Date(fdate.getTime());
+    this.toDate = new Date(tdate.getTime() + 86399000);
+    console.log(this.fromDate);
+    console.log(this.toDate);
 
-    this.growersData = data.filter((item: any) => {
-      let transDate = this.pipe.transform(item.submitteddate, 'shortDate');
-      // console.log(transDate);
-      return transDate >= this.fromDate &&
-        transDate <= this.toDate;
+    this.growersData = data.filter((item) => {
+      // this.transDate = this.pipe.transform(item.submitteddate, 'shortDate');
+      this.transDate = new Date(item.submitteddate);
+      console.log(this.transDate);
+      return this.transDate.getTime() >= this.fromDate.getTime() &&
+        this.transDate.getTime() <= this.toDate.getTime();
     });
+    console.log(this.growersData);
+
   }
 
   loadApproved() {
