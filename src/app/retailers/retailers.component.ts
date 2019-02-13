@@ -47,11 +47,7 @@ export class RetailersComponent implements OnInit {
   dateVal: any;
   errMsg: any;
   selectedDistributor: any;
-  distributorList = [
-    { id: 1, name: 'Distributor 1' },
-    { id: 2, name: 'Distributor 2' },
-    { id: 3, name: 'Distributor 3' },
-  ];
+  distributorList: any;
 
   sampleData = [{
     "id": 3,
@@ -146,6 +142,7 @@ export class RetailersComponent implements OnInit {
     this.loadPending();
     this.loadApproved();
     this.loadDenied();
+    this.loadDistributors();
     // console.log(this.dashboard);
     this.dtOptions = {
       pagingType: 'full_numbers'
@@ -159,6 +156,7 @@ export class RetailersComponent implements OnInit {
   downloadImage(img) {
     this.validationService.getImage(img).subscribe(
       (res) => {
+        console.log(res)
         const a = document.createElement('a');
         a.href = URL.createObjectURL(res);
         a.download = "receipt_" + this.viewData.invoice;
@@ -222,6 +220,17 @@ export class RetailersComponent implements OnInit {
     this.viewData.distributor = distributor;
   }
 
+  loadDistributors() {
+    Promise.resolve(this.validationService.getDistributors())
+      .then(data => {
+        this.distributorList = data;
+        // console.log(data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   loadPending() {
     Promise.resolve(this.validationService.getRetailersTrans(2))
       .then(data => {
@@ -278,11 +287,13 @@ export class RetailersComponent implements OnInit {
     // info.receipt_photo = "/assets/img/attc.png";
     this.attachedImg = info.receipt_photo;
     this.viewData = info;
-    this.distributorList.filter(data => {
-      if (data.id == this.viewData.distributor) {
-        this.viewData.distributor_name = data.name;
-      }
-    })
+    if (this.viewData.distributor) {
+      this.distributorList.filter(data => {
+        if (data.id == this.viewData.distributor) {
+          this.viewData.distributor_name = data.name;
+        }
+      })
+    }
     // this.viewData.products.push({ id: 2, quantity: 3 , points: 2})
     // }
   }

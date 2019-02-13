@@ -25,7 +25,7 @@ export class ValidationService {
     .set('Access-Control-Allow-Methods', 'GET, POST')
     // .set("x-access-token", this.token)
     .set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
+  setHeaders = new HttpHeaders({ 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Credentials': 'true' });
   set getSelectedData(value: any) {
     this._value = value;
   }
@@ -67,6 +67,7 @@ export class ValidationService {
   getImage(imageUrl: string) {
     return this.http.get(imageUrl, { observe: 'response', responseType: 'blob' })
       .map((res) => {
+        console.log(res);
         return new Blob([res.body], { type: res.headers.get('Content-Type') });
       })
   }
@@ -139,6 +140,20 @@ export class ValidationService {
         data => {
           resolve(data);
           // console.log('growersData', data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+  }
+
+  getDistributors() {
+    return new Promise(resolve => {
+      this.http.get<myData>(this.link + '/api/getDistributor').subscribe(
+        data => {
+          resolve(data);
+          console.log(data);
         },
         err => {
           console.log(err);
