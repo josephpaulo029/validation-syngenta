@@ -13,7 +13,7 @@ export class NeedAuthGuardService implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log(this.validationService.isLogged());
+    // console.log(this.validationService.isLogged());
     const redirectUrl = route['_routerState']['url'];
 
     if (this.validationService.isLogged()) {

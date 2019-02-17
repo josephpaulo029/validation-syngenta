@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   loginUser(form: NgForm) {
     this.arr = form.value
-    console.log(this.arr)
+    // console.log(this.arr)
 
     Promise.resolve(this.validationService.loginAuth(form.value)).then((data) => {
       console.log(data);

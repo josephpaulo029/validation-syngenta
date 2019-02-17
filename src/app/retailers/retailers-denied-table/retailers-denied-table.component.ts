@@ -58,17 +58,17 @@ export class RetailersDeniedTableComponent implements OnInit {
     let tdate = new Date(this.validationService.getTo);
     this.fromDate = new Date(fdate.getTime());
     this.toDate = new Date(tdate.getTime() + 86399000);
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.retailersData = data.filter((item) => {
       // this.transDate = this.pipe.transform(item.submitteddate, 'shortDate');
       this.transDate = new Date(item.submitteddate);
-      console.log(this.transDate);
+      // console.log(this.transDate);
       return this.transDate.getTime() >= this.fromDate.getTime() &&
         this.transDate.getTime() <= this.toDate.getTime();
     });
-    console.log(this.retailersData);
+    // console.log(this.retailersData);
 
   }
 

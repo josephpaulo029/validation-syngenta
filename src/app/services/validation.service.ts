@@ -17,6 +17,7 @@ export class ValidationService {
   _status: any;
   _from: any;
   _to: any;
+  listDistributor: any;
   accountData: any;
 
   headers = new HttpHeaders()
@@ -59,9 +60,10 @@ export class ValidationService {
   }
 
   constructor(private http: HttpClient) {
-    this.link = "http://128.199.228.223:3000"
+    this.link = "https://128.199.228.223:3000"
     // this.link = "http://192.168.43.202:3000"
     this.link2 = "http://localhost:3000"
+    this.getDistributors();
   }
 
   getImage(imageUrl: string) {
@@ -73,7 +75,7 @@ export class ValidationService {
   }
 
   loginAuth(info) {
-    console.log(info);
+    // console.log(info);
     let data;
     data = {
       username: info.email,
@@ -152,8 +154,9 @@ export class ValidationService {
     return new Promise(resolve => {
       this.http.get<myData>(this.link + '/api/getDistributor').subscribe(
         data => {
+          this.listDistributor = data;
           resolve(data);
-          console.log(data);
+          // console.log(data);
         },
         err => {
           console.log(err);
@@ -163,7 +166,7 @@ export class ValidationService {
   }
 
   getGrowerInfo(info) {
-    console.log(info.userid);
+    // console.log(info.userid);
     return new Promise(resolve => {
       this.http.get<myData>(this.link + '/get/growers/' + info.userid).subscribe(
         data => {
@@ -178,12 +181,12 @@ export class ValidationService {
   }
 
   getRetailerInfo(info) {
-    console.log(info);
+    // console.log(info);
     return new Promise(resolve => {
       this.http.get<myData>(this.link + '/get/retailers/' + info).subscribe(
         data => {
           resolve(data);
-          console.log('getRetailerInfo', data);
+          // console.log('getRetailerInfo', data);
         },
         err => {
           console.log(err);
@@ -197,7 +200,7 @@ export class ValidationService {
       this.http.get<myData>(this.link + '/get/fieldforces/' + id).subscribe(
         data => {
           resolve(data);
-          console.log('getFieldforceInfo', data);
+          // console.log('getFieldforceInfo', data);
         },
         err => {
           console.log(err);
@@ -262,8 +265,8 @@ export class ValidationService {
       };
     }
 
-    console.log(info);
-    console.log(data);
+    // console.log(info);
+    // console.log(data);
     return new Promise(resolve => {
       this.http.patch(this.link + '/api/rewards/growers/claim/' + info.transid + '', data).subscribe(
         data => {
@@ -304,7 +307,7 @@ export class ValidationService {
   }
 
   addTransDetails(trans) {
-    console.log(trans);
+    // console.log(trans);
     trans.products.filter(product => {
       if (!product.amount) {
         product.amount = 0;
@@ -332,7 +335,7 @@ export class ValidationService {
       invoicedate: trans.invoicedate ? trans.invoicedate : "",
       remarks: trans.remarks ? trans.remarks : "",
     }
-    console.log(data);
+    // console.log(data);
 
     return new Promise(resolve => {
       this.http.post(this.link + '/api/addTransDetails', data).subscribe(
@@ -349,7 +352,7 @@ export class ValidationService {
   }
 
   checkAvailability(info) {
-    console.log(info);
+    // console.log(info);
     let data;
     data = {
       type: info.type,
@@ -359,7 +362,7 @@ export class ValidationService {
       this.http.get<myData>(this.link + '/api/checkTrans/' + data.type + '/' + data.transid).subscribe(
         data => {
           resolve(data);
-          console.log('result', data);
+          // console.log('result', data);
         },
         err => {
           console.log(err);
@@ -369,7 +372,7 @@ export class ValidationService {
   }
 
   addSelected(trans) {
-    console.log(trans);
+    // console.log(trans);
 
     let data = {
       id: 0,
@@ -378,7 +381,7 @@ export class ValidationService {
       type: trans.type,
       remarks: trans.remarks ? trans.remarks : "",
     }
-    console.log(data);
+    // console.log(data);
 
     return new Promise(resolve => {
       this.http.post(this.link + '/api/addSelected', data).subscribe(
@@ -395,14 +398,14 @@ export class ValidationService {
   }
 
   addTrans(trans) {
-    console.log(trans);
+    // console.log(trans);
     let data = {
       id: 0,
       transNo: trans.transid,
       grossTotal: trans.grossSales,
       remarks: ""
     }
-    console.log(data);
+    // console.log(data);
 
     return new Promise(resolve => {
       this.http.post(this.link + '/api/addTrans', data).subscribe(
@@ -425,7 +428,7 @@ export class ValidationService {
   }
 
   addItem(item) {
-    console.log(item);
+    // console.log(item);
     let data = {
       id: 0,
       itemNo: item.prodid,
@@ -435,7 +438,7 @@ export class ValidationService {
       amount: item.amount,
       remarks: ""
     }
-    console.log(data);
+    // console.log(data);
 
     return new Promise(resolve => {
       this.http.post(this.link + '/api/addItem', data).subscribe(
@@ -486,7 +489,7 @@ export class ValidationService {
   }
 
   approvesendSMS(info) {
-    console.log(info);
+    // console.log(info);
     let data;
     if (info.type == "grower") {
       let msg = "Dear " + info.name + ",\n\nItong mensahe ay para kumpirmahin na natanggap at\n na-aprubahan ang iyong pagsusumite.\n\nKatumbas na Puntos:" + info.total_points
@@ -495,7 +498,7 @@ export class ValidationService {
         mobile: info.phone_number,
         message: msg,
       }
-      console.log(data);
+      // console.log(data);
 
     }
 
@@ -514,14 +517,14 @@ export class ValidationService {
   }
 
   denysendSMS(info) {
-    console.log(info);
+    // console.log(info);
     let data;
     if (info.type == "grower") {
       data = {
         mobile: info.phone_number,
         message: info.remarks,
       }
-      console.log(data);
+      // console.log(data);
     } else {
       data = {
         mobile: info.phone_number,

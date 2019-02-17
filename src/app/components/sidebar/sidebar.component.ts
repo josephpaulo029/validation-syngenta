@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.accountInfo = JSON.parse(localStorage.getItem('accountinfo'));
     // this.timelog = this.validationService.accountData.datetime;
-    console.log(this.accountInfo);
+    // console.log(this.accountInfo);
 
     // Promise.resolve(this.validationService.getaccountInfo())
     //   .then(data => {

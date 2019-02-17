@@ -9,42 +9,47 @@
           <div class="nav-tabs-wrapper">
             <ul class="nav nav-tabs" data-tabs="tabs">
               <li class="nav-item" id="pendingBtn" (click)="clickPending()">
-                <a class="nav-link" [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}"
                   [href]="activeHref" data-toggle="tab">Pending</a>
               </li>
               <li class="nav-item" id="approvedBtn" (click)="clickApproved()">
-                <a class="nav-link" [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}"
                   [href]="activeHref" data-toggle="tab">Approved</a>
               </li>
               <li class="nav-item" id="deniedBtn" (click)="clickDenied()">
-                <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
                   [href]="activeHref" data-toggle="tab">Denied</a>
               </li>
               <li class="dateStyle">
                 <!-- <mat-label>From</mat-label> -->
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <!-- <i class="material-icons">date_range</i> -->
-                <button type="button" *ngIf="!dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">--/--/----</button>
+                <button type="button" *ngIf="!dateFrom" class="btn btn-warning"
+                  (click)="pickerFrom.open();">--/--/----</button>
                 <button type="button" *ngIf="dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">{{dateFrom
                   | date: "MMMM dd, yyyy" || '-'}}</button>
                 <!-- <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
                   <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerFrom></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
-                <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)" (dateChange)="getDate('from', $event)"
-                  [matDatepicker]="pickerFrom">
+                <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)"
+                  (dateChange)="getDate('from', $event)" [matDatepicker]="pickerFrom">
 
                 <mat-label>&nbsp;&nbsp;TO&nbsp;&nbsp;</mat-label>
 
-                <button type="button" *ngIf="!dateTo" class="btn btn-warning" (click)="pickerTo.open();">--/--/----</button>
+                <button type="button" *ngIf="!dateTo" class="btn btn-warning"
+                  (click)="pickerTo.open();">--/--/----</button>
                 <button type="button" *ngIf="dateTo" class="btn btn-warning" (click)="pickerTo.open();">{{dateTo |
                   date: "MMMM dd, yyyy" || '-'}}</button>
                 <!-- <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
                   <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerTo></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerTo" style="color: #fff;"></mat-datepicker-toggle> -->
-                <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)" (dateChange)="getDate('to', $event)"
-                  [matDatepicker]="pickerTo">
+                <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)"
+                  (dateChange)="getDate('to', $event)" [matDatepicker]="pickerTo">
               </li>
             </ul>
           </div>
@@ -66,14 +71,15 @@
                     <h4 class="card-title">RETAILER SUBMISSION FOR VALIDATION</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="pendingRetailersData ? pendingRetailersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="pendingRetailersData ? pendingRetailersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-pending-table #pendingTbl [dashboard]="dashboard" [status]="'pendingActive'" (viewData)="selectData($event)"></app-retailers-pending-table>
+                <app-retailers-pending-table #pendingTbl [dashboard]="dashboard" [status]="'pendingActive'"
+                  (viewData)="selectData($event)"></app-retailers-pending-table>
               </div>
             </div>
           </div>
@@ -85,8 +91,8 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="approveRetailersData ? approveRetailersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="approveRetailersData ? approveRetailersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
@@ -105,14 +111,15 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="deniedRetailersData ? deniedRetailersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="deniedRetailersData ? deniedRetailersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-retailers-denied-table #deniedTbl [dashboard]="dashboard" [status]="'deniedActive'" (viewData)="selectData($event)"></app-retailers-denied-table>
+                <app-retailers-denied-table #deniedTbl [dashboard]="dashboard" [status]="'deniedActive'"
+                  (viewData)="selectData($event)"></app-retailers-denied-table>
               </div>
             </div>
           </div>
@@ -122,7 +129,8 @@
 
     <div *ngIf="viewDataActive">
       <div class="row btnStyles" *ngIf="viewDataActive">
-        <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"><i class="material-icons">arrow_back_ios</i>&nbsp;&nbsp;BACK</button>
+        <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"><i
+            class="material-icons">arrow_back_ios</i>&nbsp;&nbsp;BACK</button>
       </div>
 
       <div class="spacer"></div>
@@ -186,7 +194,8 @@
                     || '-'}}</mat-label>
                 </div>
                 <div class="col dataVal" *ngIf="viewData.status == 2">
-                  <mat-label *ngIf="!dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">--/--/----</mat-label>
+                  <mat-label *ngIf="!dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">
+                    --/--/----</mat-label>
                   <mat-label *ngIf="dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">{{dateVal
                     | date: "MM/dd/yyyy"
                     || '-'}}</mat-label>
@@ -224,9 +233,22 @@
                   <mat-label style="margin-right: 15px;">{{viewData.distributor_name || '-'}}</mat-label>
                 </div>
                 <div class="col dataVal" *ngIf="viewData.status == 2">
-                  <select class="form-control selectpicker" (change)="getDistributor($event)" [(ngModel)]="selectedDistributor"
-                    style="font-weight: 600; font-size: 1.125rem; color: #333;" data-style="btn btn-link" id="exampleFormControlSelect1">
-                    <option *ngFor="let distributor of distributorList" [value]="distributor.id">{{distributor.name}}</option>
+                  <div class="form-group label-floating has-success" style="margin: 0px 0 0;">
+                    <!-- <label class="control-label">Success input</label> -->
+                    <input type="text" placeholder="Choose Distributor" [value]="selectedDistributor" (keypress)="$event.preventDefault()"
+                      class="form-control dataVal" data-toggle="modal" data-target="#viewDistributors" (click)="searchDistributor()" />
+                    <span class="form-control-feedback">
+                      <i class="material-icons">edit</i>
+                    </span>
+                  </div>
+                </div>
+                <div class="col dataVal" *ngIf="viewData.status == 22">
+                  <select class="form-control selectpicker" (change)="getDistributor($event)"
+                    style="font-weight: 600; font-size: 1.125rem; color: #333;" data-style="btn btn-link"
+                    id="exampleFormControlSelect1">
+                    <option disabled>Choose Distributor</option>
+                    <option *ngFor="let distributor of distributorList" [value]="distributor.id">{{distributor.name}}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -242,11 +264,13 @@
                 <div class="col col-4">
                   <h4>Attached Invoice</h4>
                 </div>
-                <div *ngIf="viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;"
-                  data-toggle="modal" data-target="#viewAttachment">{{
+                <div *ngIf="viewData.receipt_photo" class="col dataVal"
+                  style="cursor: pointer; text-decoration: underline; color: #ffa726;" data-toggle="modal"
+                  data-target="#viewAttachment">{{
                   viewData.receipt_photo ? 'View Attachment': '-' }}
                 </div>
-                <div *ngIf="!viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;">{{
+                <div *ngIf="!viewData.receipt_photo" class="col dataVal"
+                  style="cursor: pointer; text-decoration: underline; color: #ffa726;">{{
                   viewData.receipt_photo ? 'View Attachment': '-' }}
                 </div>
               </div>
@@ -313,9 +337,9 @@
                           PHP
                         </span>
                       </div>
-                      <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;" class="form-control"
-                        [options]="{ prefix: '', thousands: ',', decimal: '.' }" autocomplete="off" name="amount"
-                        (keypress)="addAmt(prod, amt)" placeholder="0" ngModel>
+                      <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;"
+                        class="form-control" [options]="{ prefix: '', thousands: ',', decimal: '.' }" autocomplete="off"
+                        name="amount" (keypress)="addAmt(prod, amt)" placeholder="0" ngModel>
                     </div>
                   </form>
                 </td>
@@ -352,8 +376,10 @@
       <div class="row btnStyles" *ngIf="viewData.status == 2">
         <!-- <button type="button" class="btn btn-success btn-lg" (click)="validateData()"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button> -->
         <button id="approveBtn" [hidden]="false" type="button" class="btn btn-success btn-lg" data-toggle="modal"
-          data-target="#approveModal" (click)="approveTrans(true)"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
-        <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
+          data-target="#approveModal" (click)="approveTrans(true)"><i
+            class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
+        <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i
+            class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
       </div>
       <div class="spacer"></div>
       <div class="spacer"></div>
@@ -364,8 +390,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="approveModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="approveModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -375,7 +401,8 @@
         </button> -->
       </div>
       <div class="modal-body">
-        <h5 *ngIf="modalHeader == 'APPROVED'">Retailer Documents is subject for final approval by Syngenta Marketing</h5>
+        <h5 *ngIf="modalHeader == 'APPROVED'">Retailer Documents is subject for final approval by Syngenta Marketing
+        </h5>
         <h5 *ngIf="modalHeader == 'DENIED'">Retailer will be notified via SMS</h5>
       </div>
       <div class="modal-footer">
@@ -385,8 +412,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="denyModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="denyModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
     <div class="modal-content">
       <div class="modal-header">
@@ -396,19 +423,19 @@
         </button>
       </div>
       <div class="modal-body">
-        <form style="margin-bottom: 0rem;" #reason="ngForm"><textarea rows="20" cols="80" name="reason" ngModel></textarea></form>
+        <form style="margin-bottom: 0rem;" #reason="ngForm"><textarea rows="20" cols="80" name="reason"
+            ngModel></textarea></form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" data-toggle="modal" data-target="#approveModal"
-          (click)="denyTrans(reason, false)">SUBMIT</button>
+        <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" data-toggle="modal"
+          data-target="#approveModal" (click)="denyTrans(reason, false)">SUBMIT</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewAttachmentLabel"
-  aria-hidden="true">
+<div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="viewAttachmentLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header" *ngIf="false">
@@ -426,6 +453,44 @@
             <i class="material-icons">cloud_download</i>&nbsp;&nbsp;Download
           </button>
         </form>
+      </div>
+      <div class="modal-footer" *ngIf="false">
+        <!-- <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#approveModal" (click)="denyTrans(reason, false)">SUBMIT</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="viewDistributors" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewDistributorsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="width: 500px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="viewDistributorsLabel">Select Distributor</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="searchd.reset();">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="overflow-y: scroll; height: 500px;">
+          <form #searchd="ngForm">
+            <div class="form-group label-floating has-success" style="margin: 0px 0 0;">
+              <!-- <label class="control-label">Success input</label> -->
+              <input type="text" placeholder="Search..." class="form-control dataVal" name="searchInput"
+                (keydown)="searchDistributor(searchd)" ngModel />
+              <span class="form-control-feedback">
+                <i class="material-icons">edit</i>
+              </span>
+            </div>
+          </form>
+
+          <table class="table">
+            <tbody>
+              <tr *ngFor="let distributor of searchRes" (click)="getDistributor(distributor)" data-dismiss="modal">
+                <td class="text-left">{{distributor.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="modal-footer" *ngIf="false">
         <!-- <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#approveModal" (click)="denyTrans(reason, false)">SUBMIT</button> -->

@@ -70,6 +70,7 @@ export class RetailersComponent implements OnInit {
   dateFrom: any;
   dateTo: any;
   status1: any;
+  searchRes: any;
 
   constructor(private validationService: ValidationService, private router: Router, private route: ActivatedRoute) {
 
@@ -119,6 +120,8 @@ export class RetailersComponent implements OnInit {
         // console.log(this.dashboardSelect);
         this.defaultnavStatus();
         this.viewDataActive = true;
+        this.selectedDistributor = "";
+
         if (this.dashboard) {
           // console.log(this.dashboard);
 
@@ -142,7 +145,7 @@ export class RetailersComponent implements OnInit {
     this.loadPending();
     this.loadApproved();
     this.loadDenied();
-    this.loadDistributors();
+    // this.loadDistributors();
     // console.log(this.dashboard);
     this.dtOptions = {
       pagingType: 'full_numbers'
@@ -213,13 +216,6 @@ export class RetailersComponent implements OnInit {
     // }
   }
 
-  getDistributor(event: any) {
-    let distributor;
-    distributor = event.target.value;
-    // console.log(distributor);
-    this.viewData.distributor = distributor;
-  }
-
   loadDistributors() {
     Promise.resolve(this.validationService.getDistributors())
       .then(data => {
@@ -254,7 +250,7 @@ export class RetailersComponent implements OnInit {
       .then(data => {
         this.approveRetailersData = data;
         this.approveLength.emit(this.approveRetailersData);
-        console.log(this.approveRetailersData);
+        // console.log(this.approveRetailersData);
         // console.log(data);
 
       })
@@ -281,21 +277,83 @@ export class RetailersComponent implements OnInit {
   }
 
   selectData(info) {
+    this.viewData = {};
+    this.selectedDistributor = "";
+    // this.loadDistributors();
     // if (!this.dashboard) {
     // console.log(info);
     this.viewDataActive = true;
     // info.receipt_photo = "/assets/img/attc.png";
     this.attachedImg = info.receipt_photo;
     this.viewData = info;
-    if (this.viewData.distributor) {
-      this.distributorList.filter(data => {
-        if (data.id == this.viewData.distributor) {
-          this.viewData.distributor_name = data.name;
+
+
+    // console.log(this.viewData.distributor);
+    Promise.resolve(this.validationService.getDistributors())
+      .then(data => {
+
+        this.distributorList = data;
+        // console.log(this.distributorList);
+        if (!this.pendingActive) {
+
+          this.distributorList.find(data => {
+            if (data.id == this.viewData.distributor) {
+              this.viewData.distributor_name = data.name;
+            }
+          })
+        }
+        // console.log(data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    // console.log(this.viewData);
+  }
+
+  searchDistributor(info: any) {
+    Promise.resolve(this.validationService.getDistributors())
+      .then(data => {
+        this.searchRes = data;
+        this.distributorList = data;
+        // console.log(data);
+        // console.log(this.distributorList);
+        // console.log(this.searchRes)
+        // console.log(info)
+        if (info != undefined) {
+          const val = info.value.searchInput;
+          let wew = JSON.stringify(this.distributorList);
+          this.searchRes = JSON.parse(wew);
+          if (val && val.trim() != '') {
+            this.searchRes = this.distributorList.filter((item) => {
+              return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+            })
+            // console.log(this.searchRes);
+          }
         }
       })
-    }
-    // this.viewData.products.push({ id: 2, quantity: 3 , points: 2})
-    // }
+      .catch(e => {
+        console.log(e);
+      });
+    // this.searchRes = this.distributorList;
+
+
+
+  }
+
+  getDistributor(info) {
+    let distributor;
+    distributor = info.id;
+    console.log(info);
+    this.viewData.distributor = distributor;
+    this.selectedDistributor = info.name;
+    console.log(this.viewData);
+
+  }
+
+  getDistributorName(id) {
+    return this.validationService.listDistributor.find(data => {
+      return data.name
+    })
   }
 
   addAmt(prod, form: NgForm) {
@@ -355,7 +413,6 @@ export class RetailersComponent implements OnInit {
               // this.goBack();
               this.totalGross = 0;
               this.dateVal = undefined;
-              this.selectedDistributor = 0;
             }).catch(e => {
               console.log(e);
             });
@@ -396,7 +453,6 @@ export class RetailersComponent implements OnInit {
                   // this.goBack();
                   this.totalGross = 0;
                   this.dateVal = undefined;
-                  this.selectedDistributor = 0;
                 }).catch(e => {
                   console.log(e);
                 });

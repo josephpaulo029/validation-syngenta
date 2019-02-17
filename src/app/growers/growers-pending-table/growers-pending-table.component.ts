@@ -59,17 +59,17 @@ export class GrowersPendingTableComponent implements OnInit {
     let tdate = new Date(this.validationService.getTo);
     this.fromDate = new Date(fdate.getTime());
     this.toDate = new Date(tdate.getTime() + 86399000);
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    // console.log(this.fromDate);
+    // console.log(this.toDate);
 
     this.growersData = data.filter((item) => {
       // this.transDate = this.pipe.transform(item.submitteddate, 'shortDate');
       this.transDate = new Date(item.submitteddate);
-      console.log(this.transDate);
+      // console.log(this.transDate);
       return this.transDate.getTime() >= this.fromDate.getTime() &&
         this.transDate.getTime() <= this.toDate.getTime();
     });
-    console.log(this.growersData);
+    // console.log(this.growersData);
 
   }
 
@@ -81,7 +81,7 @@ export class GrowersPendingTableComponent implements OnInit {
         this.filterbyDate(this.growersData);
         this.rerender();
         // this.growersData = this.sampleData;
-        console.log(this.growersData);
+        // console.log(this.growersData);
         // console.log(data);
 
       })
