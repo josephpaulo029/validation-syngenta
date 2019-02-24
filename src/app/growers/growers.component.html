@@ -9,42 +9,47 @@
           <div class="nav-tabs-wrapper">
             <ul class="nav nav-tabs" data-tabs="tabs">
               <li class="nav-item" id="pendingBtn" (click)="clickPending()">
-                <a class="nav-link" [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': pendingActive, 'nav-link': pendingActive, navLink: !pendingActive}"
                   [href]="activeHref" data-toggle="tab">Pending</a>
               </li>
               <li class="nav-item" id="approvedBtn" (click)="clickApproved()">
-                <a class="nav-link" [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': approvedActive, 'nav-link': approvedActive, navLink: !approvedActive}"
                   [href]="activeHref" data-toggle="tab">Approved</a>
               </li>
               <li class="nav-item" id="deniedBtn" (click)="clickDenied()">
-                <a class="nav-link" [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
+                <a class="nav-link"
+                  [ngClass]="{'nav-link active': deniedActive, 'nav-link': deniedActive, navLink: !deniedActive}"
                   [href]="activeHref" data-toggle="tab">Denied</a>
               </li>
               <li class="dateStyle">
                 <!-- <mat-label>From</mat-label> -->
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
                 <!-- <i class="material-icons">date_range</i> -->
-                <button type="button" *ngIf="!dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">--/--/----</button>
+                <button type="button" *ngIf="!dateFrom" class="btn btn-warning"
+                  (click)="pickerFrom.open();">--/--/----</button>
                 <button type="button" *ngIf="dateFrom" class="btn btn-warning" (click)="pickerFrom.open();">{{dateFrom
                   | date: "MMMM dd, yyyy" || '-'}}</button>
                 <!-- <mat-label *ngIf="!dateFrom" (click)="pickerFrom.open();">--/--/----</mat-label>
                 <mat-label *ngIf="dateFrom" (click)="pickerFrom.open();">{{dateFrom | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerFrom></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerFrom" style="color: #fff;"></mat-datepicker-toggle> -->
-                <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)" (dateChange)="getDate('from', $event)"
-                  [matDatepicker]="pickerFrom">
+                <input type="hidden" [max]="dateTo" (dateInput)="getDate('input', $event)"
+                  (dateChange)="getDate('from', $event)" [matDatepicker]="pickerFrom">
 
                 <mat-label>&nbsp;&nbsp;TO&nbsp;&nbsp;</mat-label>
 
-                <button type="button" *ngIf="!dateTo" class="btn btn-warning" (click)="pickerTo.open();">--/--/----</button>
+                <button type="button" *ngIf="!dateTo" class="btn btn-warning"
+                  (click)="pickerTo.open();">--/--/----</button>
                 <button type="button" *ngIf="dateTo" class="btn btn-warning" (click)="pickerTo.open();">{{dateTo |
                   date: "MMMM dd, yyyy" || '-'}}</button>
                 <!-- <mat-label *ngIf="!dateTo" (click)="pickerTo.open();">--/--/----</mat-label>
                 <mat-label *ngIf="dateTo" (click)="pickerTo.open();">{{dateTo | date: "MMMM dd, yyyy" || '-'}}</mat-label> -->
                 <mat-datepicker touchUi #pickerTo></mat-datepicker>
                 <!-- <mat-datepicker-toggle matSuffix [for]="pickerTo" style="color: #fff;"></mat-datepicker-toggle> -->
-                <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)" (dateChange)="getDate('to', $event)"
-                  [matDatepicker]="pickerTo">
+                <input type="hidden" [min]="dateFrom" (dateInput)="getDate('input', $event)"
+                  (dateChange)="getDate('to', $event)" [matDatepicker]="pickerTo">
               </li>
 
             </ul>
@@ -71,14 +76,15 @@
                     <h4 class="card-title">GROWERS SUBMISSION FOR VALIDATION</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="pendingGrowersData ? pendingGrowersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="pendingGrowersData ? pendingGrowersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-pending-table #pendingTbl [dashboard]="dashboard" [status]="'pendingActive'" (viewData)="selectData($event)"></app-growers-pending-table>
+                <app-growers-pending-table #pendingTbl [dashboard]="dashboard" [status]="'pendingActive'"
+                  (viewData)="selectData($event)"></app-growers-pending-table>
               </div>
             </div>
           </div>
@@ -90,14 +96,15 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="approveGrowersData ? approveGrowersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="approveGrowersData ? approveGrowersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-approved-table #appovedTbl [dashboard]="dashboard" [status]="'approvedActive'" (viewData)="selectData($event)"></app-growers-approved-table>
+                <app-growers-approved-table #appovedTbl [dashboard]="dashboard" [status]="'approvedActive'"
+                  (viewData)="selectData($event)"></app-growers-approved-table>
               </div>
             </div>
           </div>
@@ -109,14 +116,15 @@
                     <h4 class="card-title">LIST OF TRANSACTIONS</h4>
                   </div>
                   <div class="col" style="text-align: right;">
-                    <a csvLink [data]="deniedGrowersData ? deniedGrowersData : ''" style="color: #fff;"><i class="material-icons"
-                        style="cursor: pointer;">cloud_download</i></a>
+                    <a csvLink [data]="deniedGrowersData ? deniedGrowersData : ''" style="color: #fff;"><i
+                        class="material-icons" style="cursor: pointer;">cloud_download</i></a>
                   </div>
                 </div>
                 <!-- <p class="category">Category subtitle</p> -->
               </div>
               <div class="card-body">
-                <app-growers-denied-table #deniedTbl [dashboard]="dashboard" [status]="'deniedActive'" (viewData)="selectData($event)"></app-growers-denied-table>
+                <app-growers-denied-table #deniedTbl [dashboard]="dashboard" [status]="'deniedActive'"
+                  (viewData)="selectData($event)"></app-growers-denied-table>
               </div>
             </div>
           </div>
@@ -126,7 +134,8 @@
 
     <div *ngIf="viewDataActive">
       <div class="row btnStyles" *ngIf="viewDataActive">
-        <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"><i class="material-icons">arrow_back_ios</i>&nbsp;&nbsp;BACK</button>
+        <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"><i
+            class="material-icons">arrow_back_ios</i>&nbsp;&nbsp;BACK</button>
       </div>
 
       <div class="spacer"></div>
@@ -188,7 +197,8 @@
                     || '-'}}</mat-label>
                 </div>
                 <div class="col dataVal" *ngIf="viewData.status == 2">
-                  <mat-label *ngIf="!dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">--/--/----</mat-label>
+                  <mat-label *ngIf="!dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">
+                    --/--/----</mat-label>
                   <mat-label *ngIf="dateVal" (click)="picker.open();" style="line-height: 40px; margin-right: 15px;">{{dateVal
                     | date: "MM/dd/yyyy"
                     || '-'}}</mat-label>
@@ -229,11 +239,13 @@
                 <div class="col col-4">
                   <h4>Attached Invoice</h4>
                 </div>
-                <div *ngIf="viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;"
-                  data-toggle="modal" data-target="#viewAttachment">{{
+                <div *ngIf="viewData.receipt_photo" class="col dataVal"
+                  style="cursor: pointer; text-decoration: underline; color: #ffa726;" data-toggle="modal"
+                  data-target="#viewAttachment">{{
                   viewData.receipt_photo ? 'View Attachment': '-' }}
                 </div>
-                <div *ngIf="!viewData.receipt_photo" class="col dataVal" style="cursor: pointer; text-decoration: underline; color: #ffa726;">{{
+                <div *ngIf="!viewData.receipt_photo" class="col dataVal"
+                  style="cursor: pointer; text-decoration: underline; color: #ffa726;">{{
                   viewData.receipt_photo ? 'View Attachment': '-' }}
                 </div>
               </div>
@@ -300,9 +312,11 @@
                           PHP
                         </span>
                       </div>
-                      <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;" class="form-control"
-                        [options]="{ prefix: '', thousands: ',', decimal: '.' }" autocomplete="off" name="amount"
-                        (keypress)="addAmt(prod, amt)" placeholder="0" ngModel>
+                      <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;"
+                        class="form-control"
+                        [options]="{ prefix: '', thousands: ',', decimal: '.', allowNegative: false }"
+                        autocomplete="off" name="amount" (keypress)="addAmt(prod, amt);" (keydown)="addAmt(prod, amt);"
+                        placeholder="0" ngModel>
                     </div>
                   </form>
                 </td>
@@ -339,8 +353,10 @@
       <div class="row btnStyles" *ngIf="viewData.status == 2">
         <!-- <button type="button" class="btn btn-success btn-lg" (click)="validateData()"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button> -->
         <button id="approveBtn" [hidden]="false" type="button" class="btn btn-success btn-lg" data-toggle="modal"
-          data-target="#approveModal" (click)="approveTrans(true)"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
-        <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
+          data-target="validateData: #approveModal: ''" (click)="approveTrans(true);"><i
+            class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
+        <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i
+            class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
       </div>
       <div class="spacer"></div>
       <div class="spacer"></div>
@@ -351,8 +367,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="approveModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="approveModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -371,8 +387,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="denyModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="denyModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="width: 100%;">
     <div class="modal-content">
       <div class="modal-header">
@@ -382,19 +398,20 @@
         </button>
       </div>
       <div class="modal-body">
-        <form style="margin-bottom: 0rem;" #reason="ngForm"><textarea rows="20" cols="80" name="reason" ngModel></textarea></form>
+        <form style="margin-bottom: 0rem;" #reason="ngForm"><textarea rows="20" cols="80" name="reason"
+            ngModel></textarea></form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" data-toggle="modal" data-target="#approveModal"
-          (click)="denyTrans(reason, false)">SUBMIT</button>
+        <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" data-toggle="modal"
+          data-target="#approveModal" (click)="denyTrans(reason, false)">SUBMIT</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewAttachmentLabel"
-  aria-hidden="true">
+<div class="modal fade" id="viewAttachment" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="viewAttachmentLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="width: auto;">
     <div class="modal-content">
       <div class="modal-header" *ngIf="false">

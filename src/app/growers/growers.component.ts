@@ -161,7 +161,7 @@ export class GrowersComponent implements OnInit {
         a.click();
       });
   }
-  
+
   getDate(type: string, event: MatDatepickerInputEvent<Date>) {
     switch (type) {
       case 'change':
@@ -352,10 +352,30 @@ export class GrowersComponent implements OnInit {
   }
 
   validateData() {
-    this.viewData.total_amt = this.totalGross;
-    this.viewData.type = "grower";
-    this.viewData.invoicedate = this.dateVal;
-    return true;
+    // console.log(this.dateVal);
+    if (!this.dateVal || !this.amountChecker()) {
+      return false;
+    } else {
+      this.viewData.total_amt = this.totalGross;
+      this.viewData.type = "grower";
+      this.viewData.invoicedate = this.dateVal;
+      return true;
+    }
+  }
+
+  amountChecker() {
+    let counter = 0;
+    this.viewData.products.forEach(prod => {
+      if (prod.amount == 0 || !prod.amount) {
+        counter += 1
+      }
+    });
+    // console.log(counter)
+    if (counter <= 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
   approveTrans(status) {
@@ -366,9 +386,8 @@ export class GrowersComponent implements OnInit {
 
     if (status) {
       this.validateData();
-      this.viewData.status = 1;
       if (this.validateData()) {
-
+        this.viewData.status = 1;
         Promise.resolve(this.validationService.getGrowerInfo(this.viewData))
           .then(data => {
             let growerInfo;
@@ -403,6 +422,8 @@ export class GrowersComponent implements OnInit {
           .catch(e => {
             console.log(e);
           });
+      } else {
+        alert("Please check if transaction details are already filled up.");
       }
 
     }
@@ -417,45 +438,44 @@ export class GrowersComponent implements OnInit {
   }
 
   denyTrans(form: NgForm, status) {
-    this.validateData();
     // console.log(status);
-    if (this.validateData()) {
-      if (!status) {
-        status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
-        this.viewData.status = 4;
-        this.viewData.total_points = 0;
-        this.viewData.remarks = form.value.reason;
-        Promise.resolve(this.validationService.getGrowerInfo(this.viewData))
-          .then(data => {
-            let growerInfo;
-            growerInfo = data;
-            this.viewData.phone_number = growerInfo.phone_number;
-            Promise.resolve(this.validationService.growersValidate(this.viewData))
-              .then(data => {
-                // console.log(data);
-                // console.log(this.viewData);
-                Promise.resolve(this.validationService.denysendSMS(this.viewData))
-                  .then(data => {
-                    Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-                      // console.log(data);
-                      // this.goBack();
-                      this.totalGross = 0;
-                      this.dateVal = undefined;
-                    }).catch(e => {
-                      console.log(e);
-                    });
+    // if (this.validateData()) {
+    if (!status) {
+      status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
+      this.viewData.status = 4;
+      this.viewData.total_points = 0;
+      this.viewData.remarks = form.value.reason;
+      Promise.resolve(this.validationService.getGrowerInfo(this.viewData))
+        .then(data => {
+          let growerInfo;
+          growerInfo = data;
+          this.viewData.phone_number = growerInfo.phone_number;
+          Promise.resolve(this.validationService.growersValidate(this.viewData))
+            .then(data => {
+              // console.log(data);
+              // console.log(this.viewData);
+              Promise.resolve(this.validationService.denysendSMS(this.viewData))
+                .then(data => {
+                  Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+                    // console.log(data);
+                    // this.goBack();
+                    this.totalGross = 0;
+                    this.dateVal = undefined;
                   }).catch(e => {
                     console.log(e);
                   });
-              }).catch(e => {
-                console.log(e);
-              });
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      }
+                }).catch(e => {
+                  console.log(e);
+                });
+            }).catch(e => {
+              console.log(e);
+            });
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   }
+  // }
 
 }

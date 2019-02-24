@@ -235,8 +235,9 @@
                 <div class="col dataVal" *ngIf="viewData.status == 2">
                   <div class="form-group label-floating has-success" style="margin: 0px 0 0;">
                     <!-- <label class="control-label">Success input</label> -->
-                    <input type="text" placeholder="Choose Distributor" [value]="selectedDistributor" (keypress)="$event.preventDefault()"
-                      class="form-control dataVal" data-toggle="modal" data-target="#viewDistributors" (click)="searchDistributor()" />
+                    <input type="text" placeholder="Choose Distributor" [value]="selectedDistributor"
+                      (keypress)="$event.preventDefault()" class="form-control dataVal" data-toggle="modal"
+                      data-target="#viewDistributors" (click)="searchDistributor()" />
                     <span class="form-control-feedback">
                       <i class="material-icons">edit</i>
                     </span>
@@ -338,8 +339,10 @@
                         </span>
                       </div>
                       <input currencyMask style="text-align: left; font-size: 1rem; font-weight: 600;"
-                        class="form-control" [options]="{ prefix: '', thousands: ',', decimal: '.' }" autocomplete="off"
-                        name="amount" (keypress)="addAmt(prod, amt)" placeholder="0" ngModel>
+                        class="form-control"
+                        [options]="{ prefix: '', thousands: ',', decimal: '.', allowNegative: false }"
+                        autocomplete="off" name="amount" (keypress)="addAmt(prod, amt)" (keydown)="addAmt(prod, amt);"
+                        placeholder="0" ngModel>
                     </div>
                   </form>
                 </td>
@@ -376,7 +379,7 @@
       <div class="row btnStyles" *ngIf="viewData.status == 2">
         <!-- <button type="button" class="btn btn-success btn-lg" (click)="validateData()"><i class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button> -->
         <button id="approveBtn" [hidden]="false" type="button" class="btn btn-success btn-lg" data-toggle="modal"
-          data-target="#approveModal" (click)="approveTrans(true)"><i
+          data-target="validateData: #approveModal: ''" (click)="approveTrans(true)"><i
             class="material-icons">thumb_up</i>&nbsp;&nbsp;APPROVED</button>
         <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#denyModal"><i
             class="material-icons">thumb_down</i>&nbsp;&nbsp;DENIED</button>
@@ -461,7 +464,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="viewDistributors" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="viewDistributorsLabel" aria-hidden="true">
+<div class="modal fade" id="viewDistributors" tabindex="-1" role="dialog" data-backdrop="static"
+  aria-labelledby="viewDistributorsLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="width: 500px;">
     <div class="modal-content">
       <div class="modal-header">

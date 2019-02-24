@@ -85,7 +85,7 @@ export class ValidationService {
       this.http.post<myData>(this.link + '/api/login', data, { headers: this.headers }).subscribe(data => {
         // this.result = data;
         // this.token = this.result.token;
-        console.log(data);
+        // console.log(data);
 
         this.accountData = data;
         let dt = new Date();
@@ -113,7 +113,7 @@ export class ValidationService {
     }
     return new Promise(resolve => {
       this.http.post<myData>(this.link + '/api/addLogs', data).subscribe(data => {
-        console.log(data);
+        // console.log(data);
 
         resolve(data);
       }, err => {

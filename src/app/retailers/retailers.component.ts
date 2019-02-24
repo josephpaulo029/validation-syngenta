@@ -391,18 +391,37 @@ export class RetailersComponent implements OnInit {
   }
 
   validateData() {
-    this.viewData.total_amt = this.totalGross;
-    this.viewData.type = "retailer";
-    this.viewData.invoicedate = this.dateVal;
-    return true;
+    console.log(this.dateVal);
+    if (!this.dateVal || !this.amountChecker() || !this.viewData.distributor) {
+      return false;
+    } else {
+      this.viewData.total_amt = this.totalGross;
+      this.viewData.type = "retailer";
+      this.viewData.invoicedate = this.dateVal;
+      return true;
+    }
+  }
+
+  amountChecker() {
+    let counter = 0;
+    this.viewData.products.forEach(prod => {
+      if (prod.amount == 0 || !prod.amount) {
+        counter += 1
+      }
+    });
+    console.log(counter)
+    if (counter <= 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
   approveTrans(status) {
     // console.log(status);
     if (status) {
-      this.validateData();
-      this.viewData.status = 3;
       if (this.validateData()) {
+        this.viewData.status = 3;
         // console.log(this.viewData);
         Promise.resolve(this.validationService.retailersValidate(this.viewData))
           .then(data => {
@@ -433,37 +452,34 @@ export class RetailersComponent implements OnInit {
   }
 
   denyTrans(form: NgForm, status) {
-    this.validateData();
     // console.log(status);
-    if (this.validateData()) {
-      if (!status) {
-        status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
-        this.viewData.status = 4;
-        this.viewData.total_points = 0;
-        this.viewData.remarks = form.value.reason;
-        Promise.resolve(this.validationService.retailersValidate(this.viewData))
-          .then(data => {
-            // console.log(data);
-            // console.log(this.viewData);
-            Promise.resolve(this.validationService.denysendSMS(this.viewData))
-              .then(data => {
-                Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
-                  // console.log(data);
-                  // this.router.navigate(['/dashboard']);
-                  // this.goBack();
-                  this.totalGross = 0;
-                  this.dateVal = undefined;
-                }).catch(e => {
-                  console.log(e);
-                });
+    if (!status) {
+      status ? this.modalHeader = "APPROVED" : this.modalHeader = "DENIED";
+      this.viewData.status = 4;
+      this.viewData.total_points = 0;
+      this.viewData.remarks = form.value.reason;
+      Promise.resolve(this.validationService.retailersValidate(this.viewData))
+        .then(data => {
+          // console.log(data);
+          // console.log(this.viewData);
+          Promise.resolve(this.validationService.denysendSMS(this.viewData))
+            .then(data => {
+              Promise.resolve(this.validationService.addTransDetails(this.viewData)).then(data => {
+                // console.log(data);
+                // this.router.navigate(['/dashboard']);
+                // this.goBack();
+                this.totalGross = 0;
+                this.dateVal = undefined;
               }).catch(e => {
                 console.log(e);
               });
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      }
+            }).catch(e => {
+              console.log(e);
+            });
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   }
 

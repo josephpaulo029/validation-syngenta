@@ -22,10 +22,10 @@ export class LoginComponent implements OnInit {
     // console.log(this.arr)
 
     Promise.resolve(this.validationService.loginAuth(form.value)).then((data) => {
-      console.log(data);
+      // console.log(data);
       this.loginAuth = data;
       if (this.loginAuth.auth == true) {
-        console.log('success')
+        // console.log('success')
         this.router.navigate(['/dashboard']);
       }
     }).catch(e => {
